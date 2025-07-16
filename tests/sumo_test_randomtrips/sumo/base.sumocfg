@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <!-- 必填：指定网络结构 -->
+    <input>
+        <net-file value="../data/glasgow.net.xml"/>
+        <route-files value="generated_routes.rou.xml"/>
+        <additional-files value="vehicles.add.xml,chargingStations.add.xml,../data/glasgow.poly.xml"/>
+    </input>
+
+    <!-- 车辆行为/运行参数 -->
+    <time>
+        <begin value="0"/>
+        <end value="3600"/> <!-- 模拟一小时 -->
+        <step-length value="1.0"/>
+    </time>
+
+    <report>
+        <verbose value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+    <!-- 输出 tripinfo 分析结果 -->
+    <output>
+        <tripinfo-output value="../data/tripinfo_output.xml"/>
+        <battery-output value="../data/battery_output.xml"/>
+        <vehroute-output value="../data/veh_route_output.xml"/>
+        <summary value="../data/summary_output.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+        <eager-insert value="true"/>
+    </output>
+
+    <!-- 可选功能配置（后期可扩展） -->
+    <processing>
+        <ignore-route-errors value="true"/>  <!-- 避免 early crash -->
+    </processing>
+
+    <!-- GUI 可选配置（非必须） -->
+    <gui_only>
+        <start value="true"/>
+        <quit-on-end value="false"/>
+        <delay value="50"/> <!-- 动画速度：50ms/step -->
+    </gui_only>
+</configuration>

@@ -1,0 +1,39 @@
+{
+    "fields": [
+      {
+        "name": "vehicle_id",
+        "source": "tripinfo.xml",
+        "description": "Vehicle unique ID"
+      },
+      {
+        "name": "total_energy",
+        "source": "battery.xml",
+        "description": "Total energy consumed (Wh)"
+      },
+      {
+        "name": "trip_duration",
+        "source": "tripinfo.xml",
+        "description": "Trip duration (s)"
+      },
+      {
+        "name": "charging_station_reached",
+        "source": "traci.csv",
+        "description": "Boolean flag: CS visited"
+      },
+      {
+        "name": "charging_wait_time",
+        "source": "traci.csv",
+        "description": "Waiting time before CS use (s)"
+      },
+      {
+        "name": "soc_timeseries",
+        "source": "battery.xml",
+        "description": "Battery SOC time series data"
+      },
+      {
+        "name": "num_cs_visits",
+        "source": "traci.csv",
+        "description": "Number of CS visits in one trip"
+      }
+    ]
+  }

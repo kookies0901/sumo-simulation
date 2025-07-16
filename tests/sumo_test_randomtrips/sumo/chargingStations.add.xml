@@ -1,0 +1,12 @@
+<additional>
+    <chargingStation id="cs1" lane="78407514#0_0" startPos="10" endPos="30" power="22"/>
+    <chargingStation id="cs2" lane="419734768#0_0" startPos="5" endPos="22" power="22"/>
+    <chargingStation id="cs3" lane="174663538#0_0" startPos="1" endPos="5" power="22"/>
+    <chargingStation id="cs4" lane="-890905313#0_0" startPos="15" endPos="35" power="22"/>
+    <chargingStation id="cs5" lane="800766574#0_0" startPos="8"  endPos="28" power="22"/>
+    <chargingStation id="cs6" lane="24247311#0_0" startPos="12" endPos="32" power="22"/>
+    <chargingStation id="cs7" lane="23816742#0_0" startPos="25" endPos="45" power="22"/>
+    <chargingStation id="cs8" lane="24275820#2_0" startPos="50" endPos="55" power="22"/>
+    <chargingStation id="cs9" lane="-45683787#1_0" startPos="6"  endPos="26" power="22"/>
+    <chargingStation id="cs10" lane="132852176#0_0" startPos="30" endPos="50" power="22"/>
+</additional>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2025-07-06 20:20:02.497359 by randomTrips.py UNKNOWN
+<configuration>
+    <net-file value="data/map/glasgow_clean.net.xml"/>
+    <output-trip-file value="sumo/routes/S001_pet.trips.xml"/>
+    <prefix value="PET_"/>
+    <fringe-factor value="10"/>
+    <validate value="True"/>
+    <end value="8.0"/>
+</configuration>
+-->
+
+<!-- generated on 2025-07-06 20:19:59 by Eclipse SUMO duarouter Version 1.18.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
+
+    <input>
+        <net-file value="data/map/glasgow_clean.net.xml"/>
+        <route-files value="sumo/routes/S001_pet.trips.xml"/>
+    </input>
+
+    <output>
+        <output-file value="sumo/routes/S001_pet.trips.xml.tmp"/>
+        <alternatives-output value="NUL"/>
+        <write-trips value="true"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="8.0"/>
+    </time>
+
+    <report>
+        <no-warnings value="true"/>
+        <ignore-errors value="true"/>
+        <no-step-log value="true"/>
+    </report>
+
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <trip id="PET_0" depart="0.00" from="24299893#0" to="-1278375677"/>
+    <trip id="PET_1" depart="1.00" from="-389303151" to="-4475799#0"/>
+    <trip id="PET_2" depart="2.00" from="421693884" to="28662102#1"/>
+    <trip id="PET_3" depart="3.00" from="779826904" to="-21766336#0"/>
+    <trip id="PET_4" depart="4.00" from="-80249131" to="-1304747142#4"/>
+    <trip id="PET_5" depart="5.00" from="-30831885#1" to="144799286#1"/>
+    <trip id="PET_6" depart="6.00" from="-1230731357" to="-381387671#7"/>
+    <trip id="PET_7" depart="7.00" from="24324817#1" to="199094906"/>
+</routes>

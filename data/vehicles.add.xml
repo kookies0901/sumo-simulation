@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<additional>
+    <!-- 汽油车类型 -->
+    <vType id="petrol" vClass="passenger" color="1,1,0" accel="2.0" decel="4.5" length="5" maxSpeed="25" />
+    <!-- 电动车类型（含能耗与电池参数） -->
+    <vType id="EV" vClass="passenger" color="0,1,1" accel="2.0" decel="4.5" length="5" maxSpeed="25"
+        guiShape="passenger"
+        sigma="0.5"
+        minGap="2.5">
+        <param key="has.battery.device" value="true"/>
+        <param key="device.battery.maximumBatteryCapacity" value="50000"/>
+        <param key="device.battery.actualBatteryCapacity" value="50000"/><!-- 初始电量50% -->
+        <param key="device.battery.energyConsumption" value="150"/>
+        <param key="device.battery.chargingEfficiency" value="0.9"/>
+        <param key="device.battery.maximumPower" value="22000"/>
+        <param key="device.battery.criticalBatteryCapacity" value="10000"/><!-- 低于20%自动找桩充电 -->
+        <param key="device.battery.automaticChargingStationSearch" value="true"/><!-- 自动找桩 -->
+    </vType>
+</additional>

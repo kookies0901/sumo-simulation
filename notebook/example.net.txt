@@ -1,0 +1,51 @@
+// example.net.xml
+<location netOffset="-416501.65,-6186431.15" convBoundary="0.00,0.00,16339.11,10330.10" origBoundary="-4.332699,55.818702,-4.074001,55.909098" projParameter="+proj=utm +zone=30 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"/>
+
+    <type id="highway.busway" priority="1" numLanes="1" speed="27.78" allow="bus" oneway="1"/>
+    <type id="highway.cycleway" priority="1" numLanes="1" speed="5.56" allow="bicycle" oneway="0" width="2.00"/>
+    <type id="highway.footway" priority="1" numLanes="1" speed="2.78" allow="pedestrian" oneway="1" width="2.00"/>
+    <type id="highway.living_street" priority="2" numLanes="1" speed="2.78" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.motorway" priority="14" numLanes="2" speed="39.44" allow="private emergency authority army vip passenger hov taxi bus coach delivery truck trailer motorcycle evehicle custom1 custom2" oneway="1"/>
+    <type id="highway.motorway_link" priority="9" numLanes="1" speed="22.22" allow="private emergency authority army vip passenger hov taxi bus coach delivery truck trailer motorcycle evehicle custom1 custom2" oneway="1"/>
+    <type id="highway.path" priority="1" numLanes="1" speed="5.56" allow="pedestrian bicycle" oneway="0" width="2.00"/>
+    <type id="highway.pedestrian" priority="1" numLanes="1" speed="2.78" allow="pedestrian" oneway="1" width="2.00"/>
+    <type id="highway.primary" priority="12" numLanes="2" speed="27.78" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.primary_link" priority="7" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.raceway" priority="15" numLanes="2" speed="83.33" allow="vip" oneway="0"/>
+    <type id="highway.residential" priority="3" numLanes="1" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.secondary" priority="11" numLanes="1" speed="27.78" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.secondary_link" priority="6" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.service" priority="1" numLanes="1" speed="5.56" allow="pedestrian delivery bicycle" oneway="0"/>
+    <type id="highway.steps" priority="1" numLanes="1" speed="1.39" allow="pedestrian" oneway="1" width="2.00"/>
+    <type id="highway.tertiary" priority="10" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.tertiary_link" priority="5" numLanes="1" speed="22.22" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.track" priority="1" numLanes="1" speed="5.56" allow="pedestrian motorcycle moped bicycle" oneway="0"/>
+    <type id="highway.trunk" priority="13" numLanes="2" speed="27.78" disallow="pedestrian bicycle tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="highway.unclassified" priority="4" numLanes="1" speed="13.89" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" oneway="0"/>
+    <type id="railway.rail" priority="20" numLanes="1" speed="44.44" allow="rail" oneway="1"/>
+    <type id="railway.subway" priority="18" numLanes="1" speed="27.78" allow="subway" oneway="1"/>
+
+    <edge id=":10004437507_0" function="internal" bidi=":10004437507_1">
+        <lane id=":10004437507_0_0" index="0" allow="rail rail_electric rail_fast" speed="6.71" length="0.10" shape="4753.28,4440.10 4753.28,4440.10"/>
+    </edge>
+    <edge id=":287277482_5" function="internal">
+        <lane id=":287277482_5_0" index="0" disallow="tram rail_urban rail rail_electric rail_fast ship container cable_car subway aircraft wheelchair scooter drone" speed="3.65" length="4.67" shape="15779.70,3682.87 15778.25,3682.80"/>
+    </edge>
+    <edge id="545540892" from="5272503564" to="5272503565" priority="1" type="highway.footway" spreadType="center" shape="7975.64,2512.86 7977.85,2514.20 7984.80,2518.44 7987.34,2519.99">
+        <lane id="545540892_0" index="0" allow="pedestrian" speed="2.78" length="10.78" width="2.00" shape="7977.78,2514.16 7984.80,2518.44 7986.98,2519.77"/>
+    </edge>
+
+    <connection from=":9990452723_4" to="891804748#2" fromLane="0" toLane="0" dir="r" state="M"/>
+    <connection from=":9990452723_5" to="-891804748#1" fromLane="0" toLane="0" dir="l" state="M"/>
+    <connection from=":9990452723_6" to="1090731140" fromLane="0" toLane="0" dir="t" state="M"/>
+    <roundabout nodes="1221434967 1221435176 148896014" edges="106089794#0 106089794#1 106089794#2"/>
+
+
+// example.poly.xml
+    <poly id="1003503804" type="landuse" color="194,194,130" fill="1" layer="-3.00" shape="1956.394616"/>
+    <poly id="1003503805" type="landuse" color="194,194,130" fill="1" layer="-3.00" shape="1956.281846"/>
+    <poly id="1003503806" type="landuse" color="194,194,130" fill="1" layer="-3.00" shape="1969.357690"/>
+    <poly id="1003503808" type="amenity" color="237,199,199" fill="1" layer="-1.00" shape="2036.330766"/>
+    <poly id="1003559783" type="forest" color="140,196,107" fill="1" layer="-4.00" shape="9428.758859,6113.594637 9463.236011"/>
+    <poly id="1004113663" type="amenity" color="237,199,199" fill="1" layer="-1.00" shape="5590.459470,1364.209072 5558.946711,1345.238501 5560.204103,1343.034026 5564.944449"/>
+    <poly id="1005359259" type="leisure" color="207,245,201" fill="1" layer="-2.00" shape="7453.750366,2847.809845 7442.233181,2861.091931 7460.860627,2877.162515 7472.377823"/>

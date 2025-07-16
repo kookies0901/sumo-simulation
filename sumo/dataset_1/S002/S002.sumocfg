@@ -1,0 +1,11 @@
+<configuration>
+    <input>
+        <net-file value="../../../data/map/glasgow_clean.net.xml"/>
+        <route-files value="routes/S002.rou.xml"/>
+        <additional-files value="cs/cs_group_002.xml,../../../data/vehicles.add.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+    </time>
+</configuration>

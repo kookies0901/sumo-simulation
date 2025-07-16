@@ -1,0 +1,16 @@
+<additional>
+    <!-- 汽油车类型 -->
+    <vType id="petrol" vClass="passenger" color="1,1,0" accel="2.0" decel="4.5" length="5" maxSpeed="25" />
+    <!-- 电动车类型（含能耗与电池参数） -->
+    <vType id="EV" vClass="passenger" color="0,1,1" accel="2.0" decel="4.5" length="5" maxSpeed="25"
+        guiShape="passenger"
+        sigma="0.5"
+        minGap="2.5">
+        <param key="has.battery.device" value="true"/>
+        <param key="device.battery.maximumBatteryCapacity" value="50000"/>         <!-- 50 kWh = 50000 Wh -->
+        <param key="device.battery.actualBatteryCapacity" value="1500"/>          <!-- 一半电（25 kWh） -->
+        <param key="device.battery.energyConsumption" value="150"/>                <!-- 每公里消耗150 Wh = 0.15 kWh -->
+        <param key="device.battery.chargingEfficiency" value="0.9"/>
+        <param key="device.battery.maximumPower" value="22000"/>                   <!-- 最大充电功率，单位W（22kW） -->
+    </vType>
+</additional>

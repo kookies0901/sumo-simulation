@@ -1,0 +1,3 @@
+scenario_id,vehicle_count,ev_ratio,cs_count,cs_layout,cs_layout_id,map_id,enable_traci,repeat_n
+S001,100,0.1,13,manual,cs_group_001,glasgow,True,1
+S002,20,0.1,13,manual,cs_group_002,glasgow,True,1

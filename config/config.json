@@ -1,0 +1,18 @@
+{
+    "project_root": "/home/ubuntu/project/MSC/Msc_Project",
+    "tools": {
+      "sumo": "/usr/share/sumo/tools"
+    },
+    "folders": {
+      "sumo_net": "sumo/net",
+      "sumo_routes": "sumo/routes",
+      "sumo_additions": "sumo/additions",
+      "scripts": "scripts",
+      "data_inputs": "data/input",
+      "data_outputs": "data/output",
+      "logs": "data/logs",
+      "models": "models"
+    },
+    "scenario_id_format": "scenario_{id:03d}"
+  }
+  
