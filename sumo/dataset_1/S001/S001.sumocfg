@@ -6,6 +6,19 @@
     </input>
     <time>
         <begin value="0"/>
-        <end value="3600"/>
+        <end value="30000"/>
     </time>
+    <report>
+        <verbose value="true"/>
+        <no-step-log value="true"/>
+    </report>
+    <output>
+        <tripinfo-output value="output/tripinfo_output.xml"/>
+        <battery-output value="output/battery_output.xml"/>
+        <vehroute-output value="output/veh_route_output.xml"/>
+        <summary value="output/summary_output.xml"/>
+        <tripinfo-output.write-unfinished value="true"/>
+        <chargingstations-output value="output/chargingevents.xml"/>
+        <eager-insert value="true"/>
+    </output>
 </configuration>

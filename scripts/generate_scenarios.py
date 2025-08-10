@@ -49,7 +49,7 @@ def main():
         try:
             print(f"[候选点生成] {map_clean} -> {layout_json}")
             # 可根据实际需求调整layout_count/cs_per_layout
-            generate_cs_candidates(map_clean, layout_json, layout_count=10, cs_per_layout=13)
+            generate_cs_candidates(map_clean, layout_json, layout_count=10, cs_per_layout=215)
         except Exception as e:
             print(f"[候选点生成] 失败: {e}")
             traceback.print_exc()

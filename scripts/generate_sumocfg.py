@@ -18,6 +18,15 @@ def generate_sumocfg(scenario_id: str,
     net_file_rel = os.path.relpath(net_file, scenario_dir)
     additional_files = f"{cs_path},{vehicles_add_path}"
 
+    # 输出文件路径
+    output_dir = os.path.join(scenario_dir, "output")
+    os.makedirs(output_dir, exist_ok=True)
+    tripinfo_output = os.path.join("output", "tripinfo_output.xml.gz")
+    battery_output = os.path.join("output", "battery_output.xml.gz")
+    vehroute_output = os.path.join("output", "veh_route_output.xml.gz")
+    summary_output = os.path.join("output", "summary_output.xml.gz")
+    chargingevents_output = os.path.join("output", "chargingevents.xml.gz")
+
     content = f"""<configuration>
     <input>
         <net-file value=\"{net_file_rel}\"/>
@@ -26,12 +35,24 @@ def generate_sumocfg(scenario_id: str,
     </input>
     <time>
         <begin value=\"0\"/>
-        <end value=\"3600\"/>
+        <end value=\"30000\"/>
     </time>
+    <report>
+        <verbose value=\"true\"/>
+        <no-step-log value=\"true\"/>
+    </report>
+    <output>
+        <tripinfo-output value=\"{tripinfo_output}\"/>
+        <battery-output value=\"{battery_output}\"/>
+        <vehroute-output value=\"{vehroute_output}\"/>
+        <summary value=\"{summary_output}\"/>
+        <tripinfo-output.write-unfinished value=\"true\"/>
+        <chargingstations-output value=\"{chargingevents_output}\"/>
+        <eager-insert value=\"true\"/>
+    </output>
 </configuration>
 """
 
-    os.makedirs(scenario_dir, exist_ok=True)
     with open(sumocfg_path, "w") as f:
         f.write(content)
 

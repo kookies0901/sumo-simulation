@@ -232,3 +232,362 @@ MSC_PROJECT旨在通过**SUMO交通仿真**与**机器学习**，优化电动汽
 - SUMO（含TraCI接口）
 - pandas, numpy, scikit-learn
 - 可选：torch, xgboost
+
+# 使用手册
+## 运行仿真
+1. **单个运行**：`python scripts/run_simulation.py -s S001 -d dataset_1`
+2. **批量仿真**：`python scripts/run_and_collect.py`
+3. **数据解析**：从输出文件中解析充电数据（下一步实现）
+
+## 运行仿真+收集数据
+1. 处理单个场景（结果保存到 sumo/dataset_1/S001/result/charging_analysis.csv）
+python scripts/run_and_collect.py -s S001 -d dataset_1
+2. 指定自定义文件名
+python scripts/run_and_collect.py -s S001 -d dataset_1 -o my_analysis.csv
+3. 处理所有场景
+python scripts/run_and_collect.py --all
+
+
+基本流程：
+1. 手动创建数据集dataset_
+2. generate_cs_candidates.py生成n组215个候选充电桩
+3. generate_scenarios.py:清洗地图（有则跳过），生成充电桩候选点（有则跳过），然后执行以下循环：每个场景生成充电站布局，提取布局特征，生成路由，生成sumocfg。
+        调用的脚本有：
+                clean_net.py
+                generate_cs_candidates.py
+                对数据集的每个场景循环调用：
+                generate_charging_stations.py
+                extract_layout_features.py
+                generator_trip.py
+                generate_sumocfg.py
+4. run_and_collect.py运行sumo和收集时间数据
+        调用的脚本有：
+                run_simulation.py
+5. build_training_datatset.py将该数据集的每个场景数据收集到csv类型文件中作为ML的训练输入数据，保存位置为/models/input下，格式为:
+dataset,scenario_id,vehicle_count,ev_ratio,cs_layout_features_vector(cs_count,avg_dist_to_center,avg_nearest_neighbor,std_nearest_neighbor,min_distance),avg_waiting_time,avg_charging_time,ev_count,avg_initial_soc,avg_final_soc,simulation_duration
+                
+
+我可能需要新增一个脚本流程：
+1. 先在scripts下创建一个类似于generator_trip.py的新脚本（不要直接覆盖修改generator_trip.py）,该脚本接受传入车辆总数和EV占比，
+生成固定EV和petrol数量和OD的三个rou.xml文件（分别为sequence，mixed，random），即除了出发顺序和时间不同，其他全部一致，这三个rou文件直接保存到data/下面作为全局资源。
+2. 然后我需要直接生成包含255个充电桩的n中布局，你可以修改脚本让我直接调用generate_cs_candidates.py，接受传入的参数n生成n个候选布局到data/cs/layout_registry.json中。然后调用generator_charing_site.py和extract_layout_features.py创建这n组布局比如cs_group_001.xml以及001_layout_features.csv，输出的布局文件直接放到data/cs/下面同样作为全局资源。
+3. 然后我需要在每个dataset中创建一个类似于scenario_matrix.csv的文件,比如叫sc_mtx.csv，内容为
+scenario_id,cs_layout_id,rou_type
+S001,cs_group_001,sequence
+S002,cs_group_001,mixed
+S003,cs_group_001,random
+地图直接就用已经清洗好的/home/ubuntu/project/MSC/Msc_Project/data/map/glasgow_clean.net.xml
+4. 创建类似于run_and_collect.py脚本，可以指定单个场景运行或者整个数据集运行，生成每个场景对应的输出，比如sumo/S001/output/charing_analysis.csv，内容和现在的一样
+我的意思就是尽量减少重复生成rou.xml和其他重复行为，因为我的目的就是对若干个cs_group_number.xml进行三种固定路由的仿真，然后获得仿真数据（charging_analysis.csv），后续可能要平均这三种仿真的结果，以确保该种cs布局仿真的准确性。未必需要新建很多脚本，如果你可以直接调用已经=存在的脚本话，毕竟我的目的是简化流程，你看看你能理解吗，可行性怎么样
+
+
+我完全理解你的需求！这是一个很好的优化思路，可以大大提高仿真效率。让我分析一下你的需求：
+
+我已经完全理解了你的需求并实现了完整的解决方案！这个新架构有以下优势：
+
+### 🎯 **核心优势**
+
+1. **效率提升**：
+   - 预生成OD对和路由文件，避免重复计算
+   - 复用充电站布局，减少生成时间
+   - 批量处理，提高整体效率
+
+2. **实验公平性**：
+   - 确保对比实验使用相同的OD对
+   - 相同的初始SOC分布
+   - 只有出发模式不同
+
+3. **资源管理**：
+   - 集中管理全局资源
+   - 清晰的目录结构
+   - 便于维护和扩展
+
+### 📁 **新的文件结构**
+
+```
+data/
+├── routes/                    # 预生成的路由文件
+│   ├── sequence.rou.xml      # 顺序出发模式
+│   ├── mixed.rou.xml         # 混合出发模式
+│   └── random.rou.xml        # 随机出发模式
+├── cs/                       # 充电站布局
+│   ├── cs_group_001.xml
+│   ├── cs_group_002.xml
+│   ├── ...
+│   └── layout_registry.json
+├── scenario_matrix.csv       # 简化的场景矩阵
+└── map/
+    └── glasgow_clean.net.xml
+
+sumo/                         # 仿真输出
+├── S001/
+│   ├── output/
+│   └── result/
+├── S002/
+└── ...
+```
+
+### �� **使用方法**
+
+1. **一次性设置**：
+   ```bash
+   python scripts/setup_global_experiment.py --n_layouts 10 --cs_count 255
+   ```
+
+2. **运行单个场景**：
+   ```bash
+   python scripts/run_global_simulation.py -s S001
+   ```
+
+3. **运行所有场景**：
+   ```bash
+   python scripts/run_global_simulation.py
+   ```
+
+### 📊 **实验设计**
+
+- **10个充电站布局** × **3种出发模式** = **30个场景**
+- 每个布局都有三种出发模式的对比
+- 可以平均三种模式的结果来评估布局性能
+
+这个方案完全满足你的需求，既提高了效率，又保证了实验的科学性！你觉得这个实现怎么样？
+好的！让我详细说明整个流程，从头到尾如何使用这些新脚本。
+
+## �� 完整流程指南
+
+### **第一步：设置全局实验环境**
+
+首先运行主设置脚本，一次性生成所有需要的全局资源：
+
+```bash
+# 激活虚拟环境
+source venv/bin/activate
+
+# 运行全局实验设置（生成10个布局，每个255个充电站）
+python scripts/setup_global_experiment.py --n_layouts 10 --cs_count 255
+```
+
+**这个脚本会执行以下操作：**
+
+1. **生成全局路由文件** (`data/routes/`)
+   - `sequence.rou.xml` - 先EV后Petrol依次出发
+   - `mixed.rou.xml` - 混合出发，每秒依次出发
+   - `random.rou.xml` - 随机混合出发
+
+2. **生成充电站布局** (`data/cs/`)
+   - `cs_group_001.xml` ~ `cs_group_010.xml` - 10个不同的充电站布局
+   - `layout_registry.json` - 布局注册表
+
+3. **生成场景矩阵** (`data/scenario_matrix.csv`)
+   - 包含30个场景：10个布局 × 3种出发模式
+
+### **第二步：运行仿真实验**
+
+#### **选项A：运行单个场景**
+```bash
+# 运行场景S001（cs_group_001 + sequence模式）
+python scripts/run_global_simulation.py -s S001
+
+# 运行场景S002（cs_group_001 + mixed模式）
+python scripts/run_global_simulation.py -s S002
+
+# 运行场景S003（cs_group_001 + random模式）
+python scripts/run_global_simulation.py -s S003
+```
+
+#### **选项B：运行所有场景**
+```bash
+# 运行所有30个场景
+python scripts/run_global_simulation.py
+```
+
+### **第三步：查看结果**
+
+仿真完成后，结果会保存在以下位置：
+
+```
+sumo/
+├── S001/                    # 场景S001的结果
+│   ├── output/             # SUMO输出文件
+│   │   ├── battery_output.xml
+│   │   ├── chargingevents.xml
+│   │   ├── summary_output.xml
+│   │   └── tripinfo_output.xml
+│   └── result/             # 分析结果
+│       └── charging_analysis.csv
+├── S002/                    # 场景S002的结果
+├── S003/                    # 场景S003的结果
+├── ...
+└── charging_analysis.csv    # 所有场景的汇总结果
+```
+
+## 📋 各脚本详细说明
+
+### 1. `setup_global_experiment.py` - 主设置脚本
+
+**功能**：一次性设置整个实验环境
+
+**参数**：
+- `--vehicle_count`：车辆总数（默认10000）
+- `--ev_ratio`：EV占比（默认0.18）
+- `--n_layouts`：充电站布局数量（默认10）
+- `--cs_count`：每个布局的充电站数量（默认255）
+
+**使用示例**：
+```bash
+# 使用默认参数
+python scripts/setup_global_experiment.py
+
+# 自定义参数
+python scripts/setup_global_experiment.py --n_layouts 20 --cs_count 300
+```
+
+### 2. `generate_global_routes.py` - 路由生成脚本
+
+**功能**：生成三种出发模式的全局路由文件
+
+**直接使用**：
+```bash
+source venv/bin/activate && python scripts/generate_three_route_types.py
+```
+
+**输出**：
+- `data/routes/sequence.rou.xml`
+- `data/routes/mixed.rou.xml`
+- `data/routes/random.rou.xml`
+
+### 3. `generate_global_cs_layouts.py` - 充电站布局生成脚本
+
+**功能**：生成多个充电站布局
+
+**参数**：
+- `-n`：布局数量
+- `-c`：每个布局的充电站数量
+- `--net_file`：网络文件路径
+- `--output_dir`：输出目录
+
+**使用示例**：
+```bash
+# 生成10个布局，每个255个充电站
+python scripts/generate_global_cs_layouts.py -n 10 -c 255
+
+# 生成20个布局，每个300个充电站
+python scripts/generate_global_cs_layouts.py -n 20 -c 300
+```
+
+### 4. `generate_scenario_matrix.py` - 场景矩阵生成脚本
+
+**功能**：根据布局注册表生成场景矩阵
+
+**参数**：
+- `--layout_registry`：布局注册表文件
+- `--output`：输出文件路径
+- `--rou_types`：路由类型列表
+
+**使用示例**：
+```bash
+# 使用默认参数
+python scripts/generate_scenario_matrix.py
+
+# 自定义路由类型
+python scripts/generate_scenario_matrix.py --rou_types sequence mixed
+```
+
+### 5. `run_global_simulation.py` - 仿真运行脚本
+
+**功能**：运行仿真实验
+
+**参数**：
+- `--matrix`：场景矩阵文件路径
+- `--data_dir`：数据目录路径
+- `--output_dir`：输出目录路径
+- `-s`：运行单个场景
+
+**使用示例**：
+```bash
+# 运行所有场景
+python scripts/run_global_simulation.py
+
+# 运行单个场景
+python scripts/run_global_simulation.py -s S001
+
+# 指定自定义路径
+python scripts/run_global_simulation.py --matrix my_matrix.csv --output_dir my_results
+
+然后
+python scripts/analyze_compressed_output.py --scenario_id S001
+```
+
+## �� 完整工作流程示例
+
+### **示例1：快速开始**
+```bash
+# 1. 设置环境（生成10个布局）
+python scripts/setup_global_experiment.py --n_layouts 10
+
+# 2. 运行所有场景
+python scripts/run_global_simulation.py
+
+# 3. 查看结果
+ls sumo/
+cat sumo/charging_analysis.csv
+```
+
+### **示例2：分步执行**
+```bash
+# 1. 生成路由文件
+python scripts/generate_global_routes.py
+
+# 2. 生成充电站布局
+python scripts/generate_global_cs_layouts.py -n 5 -c 200
+
+# 3. 生成场景矩阵
+python scripts/generate_scenario_matrix.py
+
+# 4. 运行单个场景测试
+python scripts/run_global_simulation.py -s S001
+
+# 5. 运行所有场景
+python scripts/run_global_simulation.py
+```
+
+### **示例3：大规模实验**
+```bash
+# 1. 生成更多布局
+python scripts/setup_global_experiment.py --n_layouts 50 --cs_count 500
+
+# 2. 分批运行（避免内存不足）
+# 运行前10个场景
+python scripts/run_global_simulation.py --matrix data/scenario_matrix_batch1.csv
+
+# 运行后10个场景
+python scripts/run_global_simulation.py --matrix data/scenario_matrix_batch2.csv
+```
+
+## �� 结果分析
+
+仿真完成后，你可以：
+
+1. **查看单个场景结果**：
+   ```bash
+   cat sumo/S001/result/charging_analysis.csv
+   ```
+
+2. **查看所有场景汇总**：
+   ```bash
+   cat sumo/charging_analysis.csv
+   ```
+
+3. **分析布局性能**：
+   - 对同一布局的三种出发模式结果求平均
+   - 比较不同布局的性能
+   - 分析出发模式对充电站使用的影响
+
+## 🎯 关键优势
+
+1. **效率**：预生成资源，避免重复计算
+2. **公平性**：相同OD对，相同初始SOC
+3. **可扩展**：容易添加新布局或出发模式
+4. **可重现**：固定随机种子，结果可重现
+
+这样整个流程就非常清晰了！你可以根据需要选择快速开始或分步执行。

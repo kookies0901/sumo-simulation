@@ -1,133 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2025-07-16 19:11:13.127123 by randomTrips.py UNKNOWN
+<!-- generated on 2025-08-03 02:52:26.297448 by randomTrips.py UNKNOWN
 <configuration>
     <net-file value="data/map/glasgow_clean.net.xml"/>
     <output-trip-file value="sumo/dataset_1/S001/routes/S001_pet.trips.xml"/>
     <prefix value="PET_"/>
     <fringe-factor value="10"/>
-    <validate value="True"/>
-    <end value="90.0"/>
-</configuration>
--->
-
-<!-- generated on 2025-07-16 19:11:09 by Eclipse SUMO duarouter Version 1.18.0
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/duarouterConfiguration.xsd">
-
-    <input>
-        <net-file value="data/map/glasgow_clean.net.xml"/>
-        <route-files value="sumo/dataset_1/S001/routes/S001_pet.trips.xml"/>
-    </input>
-
-    <output>
-        <output-file value="sumo/dataset_1/S001/routes/S001_pet.trips.xml.tmp"/>
-        <alternatives-output value="NUL"/>
-        <write-trips value="true"/>
-    </output>
-
-    <time>
-        <begin value="0"/>
-        <end value="90.0"/>
-    </time>
-
-    <report>
-        <no-warnings value="true"/>
-        <ignore-errors value="true"/>
-        <no-step-log value="true"/>
-    </report>
-
+    <begin value="2000.0"/>
+    <end value="8000.0"/>
+    <period value="8000.0"/>
 </configuration>
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
-    <trip id="PET_0" depart="0.00" from="24299893#0" to="-1278375677"/>
-    <trip id="PET_1" depart="1.00" from="-389303151" to="-4475799#0"/>
-    <trip id="PET_2" depart="2.00" from="421693884" to="28662102#1"/>
-    <trip id="PET_3" depart="3.00" from="779826904" to="-21766336#0"/>
-    <trip id="PET_4" depart="4.00" from="-80249131" to="-1304747142#4"/>
-    <trip id="PET_5" depart="5.00" from="-30831885#1" to="144799286#1"/>
-    <trip id="PET_6" depart="6.00" from="-1230731357" to="-381387671#7"/>
-    <trip id="PET_7" depart="7.00" from="24324817#1" to="199094906"/>
-    <trip id="PET_8" depart="8.00" from="-30831919" to="23340719#0"/>
-    <trip id="PET_9" depart="9.00" from="5203878#1" to="-10903503#0"/>
-    <trip id="PET_10" depart="10.00" from="4995516#2" to="30832111"/>
-    <trip id="PET_11" depart="11.00" from="-49749004#4" to="-28265508#0"/>
-    <trip id="PET_12" depart="12.00" from="82719367#1" to="-7713483#1"/>
-    <trip id="PET_13" depart="13.00" from="-203009092" to="-229244583#2"/>
-    <trip id="PET_14" depart="14.00" from="61430158#0" to="23844352#3"/>
-    <trip id="PET_15" depart="15.00" from="504467345#2" to="32533578#3"/>
-    <trip id="PET_16" depart="16.00" from="1395335077#0" to="85140702#1"/>
-    <trip id="PET_17" depart="17.00" from="-61430376#1" to="203907778"/>
-    <trip id="PET_18" depart="18.00" from="59539136#4" to="24289474#0"/>
-    <trip id="PET_19" depart="19.00" from="656254486#9" to="226888197"/>
-    <trip id="PET_20" depart="20.00" from="317739984#1" to="-15090995#5"/>
-    <trip id="PET_21" depart="21.00" from="-30832166#1" to="-60297481#8"/>
-    <trip id="PET_22" depart="22.00" from="-191237684#1" to="-4555866#12"/>
-    <trip id="PET_23" depart="23.00" from="-20903710#1" to="-56743641"/>
-    <trip id="PET_24" depart="24.00" from="24298755#0" to="-80503933#1"/>
-    <trip id="PET_25" depart="25.00" from="-60931308" to="-42743146#0"/>
-    <trip id="PET_26" depart="26.00" from="-368516500#3" to="80367783#6"/>
-    <trip id="PET_27" depart="27.00" from="24317846#5" to="24246920#0"/>
-    <trip id="PET_28" depart="28.00" from="-24317357#3" to="315471646"/>
-    <trip id="PET_29" depart="29.00" from="-24299944#12" to="-81069463"/>
-    <trip id="PET_30" depart="30.00" from="940755867" to="24317450#0"/>
-    <trip id="PET_31" depart="31.00" from="171453465#1" to="29858903#1"/>
-    <trip id="PET_32" depart="32.00" from="60931298#2" to="4371115"/>
-    <trip id="PET_33" depart="33.00" from="-30832195" to="-1312919359#0"/>
-    <trip id="PET_34" depart="34.00" from="-45787675#0" to="-5236931#4"/>
-    <trip id="PET_35" depart="35.00" from="-29426077#1" to="80584686"/>
-    <trip id="PET_36" depart="36.00" from="70265775#1" to="-69978391#6"/>
-    <trip id="PET_37" depart="37.00" from="25361193#0" to="-8227649#0"/>
-    <trip id="PET_38" depart="38.00" from="80367762#0" to="1152474679#0"/>
-    <trip id="PET_39" depart="39.00" from="-358875094#1" to="-4705647#3"/>
-    <trip id="PET_40" depart="40.00" from="180579429#6" to="-509430490#2"/>
-    <trip id="PET_41" depart="41.00" from="204779874" to="69191433#7"/>
-    <trip id="PET_42" depart="42.00" from="-703458050#1" to="-4381317"/>
-    <trip id="PET_43" depart="43.00" from="990633026#3" to="15090853#2"/>
-    <trip id="PET_44" depart="44.00" from="-202753994#11" to="-156831897#1"/>
-    <trip id="PET_45" depart="45.00" from="-225793482" to="24299293#1"/>
-    <trip id="PET_46" depart="46.00" from="4787454#0" to="-866681012#0"/>
-    <trip id="PET_47" depart="47.00" from="-158375770" to="-81527114"/>
-    <trip id="PET_48" depart="48.00" from="985107442#0" to="180579429#1"/>
-    <trip id="PET_49" depart="49.00" from="83484035" to="586826840#16"/>
-    <trip id="PET_50" depart="50.00" from="-1118125979#2" to="31092304#2"/>
-    <trip id="PET_51" depart="51.00" from="29425426#6" to="191439138"/>
-    <trip id="PET_52" depart="52.00" from="-367498303" to="24317487"/>
-    <trip id="PET_53" depart="53.00" from="-225995363#1" to="-98290508#0"/>
-    <trip id="PET_54" depart="54.00" from="-82738081#1" to="82055837"/>
-    <trip id="PET_55" depart="55.00" from="70264844#7" to="-510490896#0"/>
-    <trip id="PET_56" depart="56.00" from="1149215984" to="-31000828#14"/>
-    <trip id="PET_57" depart="57.00" from="80343142#0" to="60674448#0"/>
-    <trip id="PET_58" depart="58.00" from="-4476038#3" to="24317424#3"/>
-    <trip id="PET_59" depart="59.00" from="23149630#1" to="-28169952#8"/>
-    <trip id="PET_60" depart="60.00" from="4515806#0" to="194012512#1"/>
-    <trip id="PET_61" depart="61.00" from="4592198#0" to="18100224#0"/>
-    <trip id="PET_62" depart="62.00" from="-1008163186#4" to="-70265776"/>
-    <trip id="PET_63" depart="63.00" from="-1181178155#0" to="80241991#6"/>
-    <trip id="PET_64" depart="64.00" from="703451188#0" to="4904186#1"/>
-    <trip id="PET_65" depart="65.00" from="-45484275#5" to="-180365580#1"/>
-    <trip id="PET_66" depart="66.00" from="70266259" to="8080089#2"/>
-    <trip id="PET_67" depart="67.00" from="-19785217#1" to="1312984873"/>
-    <trip id="PET_68" depart="68.00" from="-171453466#1" to="41559876#2"/>
-    <trip id="PET_69" depart="69.00" from="45461392" to="-24316730#0"/>
-    <trip id="PET_70" depart="70.00" from="-925912838#1" to="202754593#6"/>
-    <trip id="PET_71" depart="71.00" from="-35919239#1" to="60931355#1"/>
-    <trip id="PET_72" depart="72.00" from="-8029411#2" to="-43072732#0"/>
-    <trip id="PET_73" depart="73.00" from="143769116#15" to="32618387#2"/>
-    <trip id="PET_74" depart="74.00" from="-28169955#3" to="-671290067#1"/>
-    <trip id="PET_75" depart="75.00" from="976119817#0" to="24324665#1"/>
-    <trip id="PET_76" depart="76.00" from="-8104182#0" to="159141895#1"/>
-    <trip id="PET_77" depart="77.00" from="-23105671#4" to="-4483821#12"/>
-    <trip id="PET_78" depart="78.00" from="-49049431" to="23314971#5"/>
-    <trip id="PET_79" depart="79.00" from="-30832217#2" to="-4381453#0"/>
-    <trip id="PET_80" depart="80.00" from="-177390909#3" to="24300067#2"/>
-    <trip id="PET_81" depart="81.00" from="-30832195" to="705452578#19"/>
-    <trip id="PET_82" depart="82.00" from="634032884#0" to="-199097886#0"/>
-    <trip id="PET_83" depart="83.00" from="-30880145" to="26954021#1"/>
-    <trip id="PET_84" depart="84.00" from="-30726336" to="-24317590#0"/>
-    <trip id="PET_85" depart="85.00" from="81069408#0" to="225017493#1"/>
-    <trip id="PET_86" depart="86.00" from="-907251286" to="4476038#3"/>
-    <trip id="PET_87" depart="87.00" from="51041013" to="-33788852"/>
-    <trip id="PET_88" depart="88.00" from="-207914326#1" to="-958394786#0"/>
-    <trip id="PET_89" depart="89.00" from="-80338358#2" to="1208605337#1"/>
+    <trip id="PET_0" depart="2000.00" from="24299893#0" to="-1278375677"/>
 </routes>

@@ -1,0 +1,2 @@
+scenario_id,dataset,avg_waiting_time,avg_charging_time,total_charging_events,total_energy_charged,ev_count,avg_initial_soc,avg_final_soc,simulation_duration
+S001,dataset_1,0,1034.0,2068,11994.28,2,0.42857142857142855,15.6988,3599.0

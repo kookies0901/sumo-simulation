@@ -3,17 +3,39 @@
     <!-- 汽油车类型 -->
     <vType id="petrol" vClass="passenger" color="1,1,0" accel="2.0" decel="4.5" length="5" maxSpeed="25" />
     <!-- 电动车类型（含能耗与电池参数） -->
-    <vType id="EV" vClass="passenger" color="0,1,1" accel="2.0" decel="4.5" length="5" maxSpeed="25"
-        guiShape="passenger"
-        sigma="0.5"
-        minGap="2.5">
+    <vType id="EV"  color="0,1,1" accel="2.0" decel="4.5" length="5" maxSpeed="25" guiShape="passenger" sigma="0.5" minGap="2.5" emissionClass="Energy" mass="1800">
         <param key="has.battery.device" value="true"/>
-        <param key="device.battery.maximumBatteryCapacity" value="50000"/>
-        <param key="device.battery.actualBatteryCapacity" value="50000"/><!-- 初始电量50% -->
-        <param key="device.battery.energyConsumption" value="150"/>
-        <param key="device.battery.chargingEfficiency" value="0.9"/>
-        <param key="device.battery.maximumPower" value="22000"/>
-        <param key="device.battery.criticalBatteryCapacity" value="10000"/><!-- 低于20%自动找桩充电 -->
-        <param key="device.battery.automaticChargingStationSearch" value="true"/><!-- 自动找桩 -->
+        <param key="has.stationfinder.device" value="true"/>
+        <param key="device.battery.capacity" value="20000"/>
+        <!-- <param key="actualBatteryCapacity" value="500"/> -->
+        <!-- <param key="device.battery.chargeLevel" value="16906"/> -->
+        <!-- <param key="device.battery.maximumChargeRate" value="22000"/ -->
+        <!-- param key="device.battery.maxPower" value="22000"/ -->
+        <param key="device.battery.maximumChargeRate" value="22000"/>
+        <param key="maximumPower" value="22000"/>
+        <param key="stoppingThreshold" value="0.1"/>
+        <param key="rotatingMass" value="40"/>
+        <param key="frontSurfaceArea" value="2.6"/>
+        <param key="airDragCoefficient" value="0.35"/>
+        <param key="radialDragCoefficient" value="0.1"/>
+        <param key="rollDragCoefficient" value="0.12"/>
+        <param key="constantPowerIntake" value="100"/>
+        <param key="propulsionEfficiency" value="0.8"/>
+        <param key="recuperationEfficiency" value="0.8"/>
+        <!-- 自动寻找充电桩设置 -->
+        <!-- 触发找桩：SOC 低于15%(20000*0.15=3000)开始找；并判断是否够跑完全程 -->
+        <param key="device.stationfinder.needToChargeLevel" value="0.15"/>
+        <param key="device.stationfinder.checkEnergyForRoute" value="true"/>
+        <!-- 目标：默认充到30%(6000)即可离开；要“尽量充满”可改 1.0 -->
+        <param key="device.stationfinder.saturatedChargeLevel" value="0.3"/>
+        <!-- 搜索范围：以“行驶时间秒”为半径；桩满等180秒后换桩 -->
+        <param key="device.stationfinder.radius" value="2400"/>
+        <param key="device.stationfinder.waitForCharge" value="600"/>
+        <!-- 安全冗余：按 1.1 倍需求充到能完成余下路程（默认即1.1） -->
+        <!-- <param key="device.stationfinder.reserveFactor" value="1.05"/> -->
+        <!-- 低电“救援”阈值：跌破3%(20000*0.03=600)进入救援；救援动作改成拖车 -->
+        <param key="device.stationfinder.emptyThreshold" value="0.03"/>
+        <param key="device.stationfinder.rescueAction" value="none"/>
+        <!-- <param key="device.stationfinder.rescueTime" value="80"/> -->
     </vType>
 </additional>

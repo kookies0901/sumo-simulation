@@ -1,0 +1,8 @@
+*.osm
+*.net.xml
+*.xml
+data/map/
+tests/sumo_test_randomtrips/data/
+sumo/
+data/cs/
+logs/

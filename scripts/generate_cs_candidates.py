@@ -78,5 +78,5 @@ if __name__ == "__main__":
     net_file = "/home/ubuntu/project/MSC/Msc_Project/data/map/glasgow_clean.net.xml"
     output_file = "/home/ubuntu/project/MSC/Msc_Project/data/dataset_1/layout_registry.json"
     layout_count = 10
-    cs_per_layout = 13
+    cs_per_layout = 215
     generate_cs_candidates(net_file, output_file, layout_count, cs_per_layout)

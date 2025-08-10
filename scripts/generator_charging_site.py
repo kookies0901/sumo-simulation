@@ -39,10 +39,11 @@ def generate_charging_stations(scenario_id: str,
             "lane": f"{edge_id}_0",
             "startPos": str(pos),
             "endPos": str(pos + 5.0),
-            "power": "220.0",
+            "power": "220000.0",
             "efficiency": "0.95",
             "chargeDelay": "1.0",
-            "chargingVehicles": ""
+            "chargeInTransit": "0"
+            # "chargingVehicles": ""
         })
 
     # Write output
