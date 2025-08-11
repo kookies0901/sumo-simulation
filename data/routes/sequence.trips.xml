@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<routes><trip id="EV_0" depart="0.00" from="24299893#0" to="-1278375677" type="EV" />
+<trip id="PET_0" depart="1800.00" from="24299893#0" to="-1278375677" type="petrol" />
+</routes>

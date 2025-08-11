@@ -1,8 +1,8 @@
 *.osm
+data/routes_EV2000(NEED-STA)
 *.net.xml
-*.xml
 data/map/
 tests/sumo_test_randomtrips/data/
 sumo/
-data/cs/
 logs/
+venv/

@@ -1,0 +1,2 @@
+cs_count,avg_dist_to_center,avg_nearest_neighbor,std_nearest_neighbor,min_distance,max_pairwise_distance,cs_density_std,cluster_count,coverage_ratio,max_gap_distance,gini_coefficient,avg_betweenness_centrality,layout_id
+215,4676.899444573985,6410.411261989754,3349.4632245025746,5.933852037251853,17768.142302559376,0.9452009989116685,73,0.6943155452436195,1721.703412379729,0.34350167069325976,0.0,cs_group_007
