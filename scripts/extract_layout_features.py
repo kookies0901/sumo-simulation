@@ -5,6 +5,8 @@ import numpy as np
 from collections import defaultdict
 from math import sqrt
 from scipy.spatial.distance import pdist, squareform
+# import networkx as nx  # 暂时注释掉
+# from sklearn.cluster import DBSCAN  # 暂时注释掉
 
 def extract_layout_features(cs_xml_path, net_xml_path):
     # Load all lane positions from net.xml
@@ -85,10 +87,22 @@ def extract_layout_features(cs_xml_path, net_xml_path):
         else:
             cs_density_std = 0.0
             
+        # 新增特征：聚类簇数（简化版本，基于距离阈值）
+        cluster_count = calculate_simple_cluster_count(coords)
+            
     else:
         avg_nn = std_nn = min_nn = 0.0
         max_pairwise_distance = 0.0
         cs_density_std = 0.0
+        cluster_count = 0
+
+    # 新增特征：空间覆盖与均衡度指标（简化版本）
+    coverage_ratio, max_gap_distance, gini_coefficient = calculate_simple_coverage_features(
+        cs_coords, lane_coords
+    )
+    
+    # 新增特征：网络位置指标（简化版本）
+    avg_betweenness_centrality = 0.0  # 暂时设为0，等依赖包安装后再实现
 
     # 构建输出字典
     features = {
@@ -98,10 +112,114 @@ def extract_layout_features(cs_xml_path, net_xml_path):
         "std_nearest_neighbor": std_nn,
         "min_distance": min_nn,
         "max_pairwise_distance": max_pairwise_distance,
-        "cs_density_std": cs_density_std
+        "cs_density_std": cs_density_std,
+        # 新增特征
+        "cluster_count": cluster_count,
+        "coverage_ratio": coverage_ratio,
+        "max_gap_distance": max_gap_distance,
+        "gini_coefficient": gini_coefficient,
+        "avg_betweenness_centrality": avg_betweenness_centrality
     }
 
     return features
+
+def calculate_simple_cluster_count(coords):
+    """简化版本的聚类计数，基于距离阈值"""
+    try:
+        if len(coords) <= 1:
+            return 0
+        
+        # 使用简单的距离阈值方法
+        threshold = 1000  # 1000米阈值
+        clusters = []
+        visited = set()
+        
+        for i in range(len(coords)):
+            if i in visited:
+                continue
+                
+            # 开始新聚类
+            cluster = [i]
+            visited.add(i)
+            
+            # 查找所有在阈值内的点
+            for j in range(i + 1, len(coords)):
+                if j not in visited:
+                    dist = np.linalg.norm(coords[i] - coords[j])
+                    if dist <= threshold:
+                        cluster.append(j)
+                        visited.add(j)
+            
+            clusters.append(cluster)
+        
+        return len(clusters)
+        
+    except:
+        return 0
+
+def calculate_simple_coverage_features(cs_coords, lane_coords):
+    """简化版本的覆盖特征计算"""
+    try:
+        # 抽样策略：选择10%的代表性路段作为虚拟需求点
+        all_edges = list(lane_coords.keys())
+        sample_size = max(1, int(len(all_edges) * 0.1))  # 10%抽样
+        
+        # 使用固定的随机种子确保结果可重现
+        np.random.seed(42)
+        sampled_edges = np.random.choice(all_edges, sample_size, replace=False)
+        
+        # 计算每个采样路段到最近充电桩的距离
+        distances_to_cs = []
+        for edge_id in sampled_edges:
+            edge_coord = lane_coords[edge_id]
+            # 计算到所有充电桩的距离，取最小值
+            dists = [np.linalg.norm(np.array(edge_coord) - np.array(cs_coord)) 
+                    for cs_coord in cs_coords]
+            min_dist = min(dists)
+            distances_to_cs.append(min_dist)
+        
+        distances_to_cs = np.array(distances_to_cs)
+        
+        # 1. Coverage ratio (500m内可到达充电桩的路段比例)
+        coverage_ratio = np.mean(distances_to_cs <= 500)
+        
+        # 2. Max gap distance (最大服务空白距离)
+        max_gap_distance = np.max(distances_to_cs)
+        
+        # 3. Gini coefficient for service accessibility
+        gini_coefficient = calculate_gini_coefficient(distances_to_cs)
+        
+        return coverage_ratio, max_gap_distance, gini_coefficient
+        
+    except Exception as e:
+        print(f"Warning: 计算覆盖特征时出错: {e}")
+        return 0.0, 0.0, 0.0
+
+def calculate_gini_coefficient(values):
+    """计算基尼系数"""
+    try:
+        if len(values) == 0:
+            return 0.0
+        
+        # 排序
+        sorted_values = np.sort(values)
+        n = len(sorted_values)
+        
+        # 计算基尼系数
+        cumsum = np.cumsum(sorted_values)
+        return (n + 1 - 2 * np.sum(cumsum) / cumsum[-1]) / n if cumsum[-1] > 0 else 0.0
+        
+    except:
+        return 0.0
+
+# 以下函数暂时注释掉，等依赖包安装后再启用
+# def calculate_network_centrality(cs_coords, lane_coords, net_xml_path):
+#     """计算网络中心性指标"""
+#     pass
+
+# def build_road_network(net_xml_path):
+#     """从net.xml构建路网图"""
+#     pass
 
 def extract_all_layout_features(cs_dir, net_xml_path, output_dir=None):
     """批量提取所有充电桩布局的特征"""
