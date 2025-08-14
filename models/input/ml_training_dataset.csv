@@ -1,2 +1,0 @@
-dataset,scenario_id,vehicle_count,ev_ratio,cs_count,avg_dist_to_center,avg_nearest_neighbor,std_nearest_neighbor,min_distance,avg_waiting_time,avg_charging_time,ev_count,avg_initial_soc,avg_final_soc,simulation_duration
-dataset_1,S001,30000,0.1,215,5038.543871311992,6786.67922096243,3577.0666309566395,10.697756774202084,0,517.0,2,0.005,0.0833936666666666,3599.0

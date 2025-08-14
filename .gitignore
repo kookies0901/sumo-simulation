@@ -6,3 +6,5 @@ tests/sumo_test_randomtrips/data/
 sumo/
 logs/
 venv/
+data/cs_1-50/
+models/

@@ -276,7 +276,7 @@ def run_single_scenario(scenario_id, cs_layout_id, rou_type, data_dir, output_di
     
     # 文件路径
     rou_file = os.path.join(data_dir, "routes", f"{rou_type}.rou.xml")
-    cs_file = os.path.join(data_dir, "cs", f"{cs_layout_id}.xml")
+    cs_file = os.path.join(data_dir, "cs_51-100", f"{cs_layout_id}.xml")
     net_file = os.path.join(data_dir, "map", "glasgow_clean.net.xml")
     
     logging.info(f"📁 文件路径:")

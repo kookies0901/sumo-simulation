@@ -516,7 +516,23 @@ python scripts/run_global_simulation.py --matrix my_matrix.csv --output_dir my_r
 
 然后
 python scripts/analyze_compressed_output.py --scenario_id S001
+
+# 处理S001-S050
+python scripts/analyze_compressed_output.py --batch
+
+# 处理S001-S010
+python scripts/analyze_compressed_output.py --start_id S001 --end_id S010
+
+# 从场景矩阵批量处理
+python scripts/analyze_compressed_output.py --matrix data/scenario_matrix.csv
+
+# 自动检测所有场景
+python scripts/analyze_compressed_output.py --all
 ```
+
+python scripts/extract_layout_features.py --layout_file data/cs_51-100/cs_candidates_51-100.json
+
+
 
 ## �� 完整工作流程示例
 
