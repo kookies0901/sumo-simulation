@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-生成充电桩布局特征与性能指标的散点图分析
-为硕士论文制作高质量的散点图 + 回归趋势线图表
+生成充电桩布局特征与性能指标的散点图分析 - 简化版本
+仅使用Linear和Polynomial回归模型，避免过拟合问题
 """
 
 import os
@@ -12,8 +12,6 @@ import seaborn as sns
 from matplotlib.backends.backend_pdf import PdfPages
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.svm import SVR
 from sklearn.metrics import r2_score, mean_squared_error
 from scipy import stats
 import warnings
@@ -43,11 +41,9 @@ def load_merged_dataset(file_path):
 def get_feature_performance_columns(df):
     """定义特征变量和性能指标列"""
     
-    # 12个布局特征变量
+    # 布局特征变量（移除已删除的列）
     feature_columns = [
-        'cs_count',
         'avg_dist_to_center',
-        'avg_nearest_neighbor',
         'std_nearest_neighbor',
         'min_distance',
         'max_pairwise_distance',
@@ -59,7 +55,7 @@ def get_feature_performance_columns(df):
         'avg_betweenness_centrality'
     ]
     
-    # 22个性能指标
+    # 性能指标（移除已删除的列）
     performance_columns = [
         'duration_mean',
         'duration_median',
@@ -74,11 +70,9 @@ def get_feature_performance_columns(df):
         'energy_cv',
         'energy_hhi',
         'energy_p90_p50_ratio',
-        'energy_zero_usage_rate',
         'vehicle_gini',
         'vehicle_cv',
         'vehicle_hhi',
-        'vehicle_zero_usage_rate',
         'charging_station_coverage',
         'reroute_count',
         'ev_charging_participation_rate',
@@ -104,8 +98,8 @@ def get_feature_performance_columns(df):
     
     return available_features, available_performance
 
-def fit_multiple_models(x, y):
-    """训练多个回归模型并返回最佳模型的结果"""
+def fit_simple_models(x, y):
+    """训练Linear和Polynomial回归模型并返回最佳模型的结果"""
     try:
         # 移除NaN值
         mask = ~(np.isnan(x) | np.isnan(y))
@@ -118,13 +112,10 @@ def fit_multiple_models(x, y):
         # 重塑数据为sklearn格式
         X = x_clean.reshape(-1, 1)
         
-        # 定义多个回归模型
+        # 定义两个回归模型
         models = {
             'Linear': LinearRegression(),
-            'Polynomial': LinearRegression(),  # 将与多项式特征一起使用
-            'RandomForest': RandomForestRegressor(n_estimators=50, random_state=42, max_depth=5),
-            'GradientBoosting': GradientBoostingRegressor(n_estimators=50, random_state=42, max_depth=3),
-            'SVR': SVR(kernel='rbf', C=1.0, gamma='scale')
+            'Polynomial': LinearRegression()  # 将与多项式特征一起使用
         }
         
         model_results = {}
@@ -146,7 +137,7 @@ def fit_multiple_models(x, y):
                     X_fit_poly = poly_features.transform(x_fit)
                     y_fit = model.predict(X_fit_poly)
                 else:
-                    # 其他模型
+                    # 线性回归
                     model.fit(X, y_clean)
                     y_pred = model.predict(X)
                     
@@ -158,9 +149,14 @@ def fit_multiple_models(x, y):
                 r2 = r2_score(y_clean, y_pred)
                 mse = mean_squared_error(y_clean, y_pred)
                 
+                # 计算皮尔逊相关系数
+                correlation, p_value = stats.pearsonr(x_clean, y_clean)
+                
                 model_results[name] = {
                     'r2': r2,
                     'mse': mse,
+                    'correlation': correlation,
+                    'p_value': p_value,
                     'x_fit': x_fit.flatten(),
                     'y_fit': y_fit,
                     'model': model
@@ -185,72 +181,8 @@ def fit_multiple_models(x, y):
                 best_result['r2'], best_model_name, model_results)
         
     except Exception as e:
-        print(f"⚠️ 多模型拟合失败: {e}")
+        print(f"⚠️ 模型拟合失败: {e}")
         return None, None, 0.0, "error", {}
-
-def calculate_correlation_and_fit(x, y):
-    """计算相关系数和拟合曲线"""
-    try:
-        # 移除NaN值
-        mask = ~(np.isnan(x) | np.isnan(y))
-        x_clean = x[mask]
-        y_clean = y[mask]
-        
-        if len(x_clean) < 3:
-            return None, None, 0.0, "insufficient_data"
-        
-        # 计算Pearson相关系数
-        correlation, p_value = stats.pearsonr(x_clean, y_clean)
-        
-        # 决定拟合方法
-        if len(x_clean) < 10:
-            # 数据点少，使用线性拟合
-            coeffs = np.polyfit(x_clean, y_clean, 1)
-            poly = np.poly1d(coeffs)
-            x_fit = np.linspace(x_clean.min(), x_clean.max(), 100)
-            y_fit = poly(x_fit)
-            r2 = r2_score(y_clean, poly(x_clean))
-            fit_type = "linear"
-        else:
-            # 尝试二阶多项式拟合
-            try:
-                coeffs = np.polyfit(x_clean, y_clean, 2)
-                poly = np.poly1d(coeffs)
-                x_fit = np.linspace(x_clean.min(), x_clean.max(), 100)
-                y_fit = poly(x_fit)
-                r2_poly = r2_score(y_clean, poly(x_clean))
-                
-                # 比较线性拟合
-                coeffs_linear = np.polyfit(x_clean, y_clean, 1)
-                poly_linear = np.poly1d(coeffs_linear)
-                r2_linear = r2_score(y_clean, poly_linear(x_clean))
-                
-                # 如果二阶多项式明显更好，使用它
-                if r2_poly > r2_linear + 0.05:
-                    r2 = r2_poly
-                    fit_type = "polynomial"
-                else:
-                    # 否则使用线性拟合
-                    coeffs = coeffs_linear
-                    poly = poly_linear
-                    y_fit = poly(x_fit)
-                    r2 = r2_linear
-                    fit_type = "linear"
-                    
-            except:
-                # 如果多项式拟合失败，使用线性拟合
-                coeffs = np.polyfit(x_clean, y_clean, 1)
-                poly = np.poly1d(coeffs)
-                x_fit = np.linspace(x_clean.min(), x_clean.max(), 100)
-                y_fit = poly(x_fit)
-                r2 = r2_score(y_clean, poly(x_clean))
-                fit_type = "linear"
-        
-        return x_fit, y_fit, r2, fit_type
-        
-    except Exception as e:
-        print(f"⚠️ 拟合计算失败: {e}")
-        return None, None, 0.0, "error"
 
 def create_scatter_plot(df, x_col, y_col, output_dir):
     """创建单个散点图"""
@@ -263,37 +195,39 @@ def create_scatter_plot(df, x_col, y_col, output_dir):
         y = df[y_col].values
         
         # 创建散点图
-        scatter = ax.scatter(x, y, alpha=0.6, s=60, color='steelblue', edgecolors='black', linewidth=0.5)
+        scatter = ax.scatter(x, y, alpha=0.7, s=80, color='steelblue', 
+                           edgecolors='black', linewidth=0.5)
         
-        # 使用多模型拟合
-        x_fit, y_fit, r2, best_model, model_results = fit_multiple_models(x, y)
+        # 使用简单模型拟合
+        x_fit, y_fit, r2, best_model, model_results = fit_simple_models(x, y)
         
         # 绘制最佳拟合线
         if x_fit is not None and y_fit is not None:
             # 根据模型类型设置颜色
             color_map = {
                 'Linear': 'darkred',
-                'Polynomial': 'red', 
-                'RandomForest': 'green',
-                'GradientBoosting': 'blue',
-                'SVR': 'purple'
+                'Polynomial': 'red'
             }
             color = color_map.get(best_model, 'darkred')
             ax.plot(x_fit, y_fit, color=color, linewidth=2.5,
                    label=f'{best_model} (R² = {r2:.3f})')
             
-            # 添加模型比较信息到图例
+            # 添加模型比较信息
             if len(model_results) > 1:
-                legend_text = f"Best: {best_model} (R² = {r2:.3f})\n"
-                sorted_models = sorted(model_results.items(), key=lambda x: x[1]['r2'], reverse=True)
-                for i, (name, result) in enumerate(sorted_models[:3]):  # 显示前3个最好的模型
-                    if i > 0:  # 跳过最佳模型（已经显示）
-                        legend_text += f"{name}: R² = {result['r2']:.3f}\n"
+                best_result = model_results[best_model]
+                info_text = f"最佳模型: {best_model}\n"
+                info_text += f"R²: {r2:.3f}\n"
+                info_text += f"相关系数: {best_result['correlation']:.3f}\n"
                 
-                # 创建文本框显示模型比较
-                ax.text(0.02, 0.98, legend_text.strip(), transform=ax.transAxes, 
+                # 显示两个模型的R²比较
+                for name, result in model_results.items():
+                    if name != best_model:
+                        info_text += f"{name} R²: {result['r2']:.3f}\n"
+                
+                # 创建文本框显示信息
+                ax.text(0.02, 0.98, info_text.strip(), transform=ax.transAxes, 
                        fontsize=9, verticalalignment='top', 
-                       bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+                       bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
         
         # 设置标签和标题
         ax.set_xlabel(x_col, fontsize=12, fontweight='bold')
@@ -331,7 +265,7 @@ def create_scatter_plot(df, x_col, y_col, output_dir):
 
 def generate_all_plots(df, feature_cols, performance_cols, output_dir):
     """生成所有散点图"""
-    print(f"\n🎨 开始生成图表...")
+    print(f"\n🎨 开始生成图表（仅Linear和Polynomial模型）...")
     
     # 创建输出目录
     os.makedirs(output_dir, exist_ok=True)
@@ -342,7 +276,7 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
     total_count = len(feature_cols) * len(performance_cols)
     
     # 创建PDF合集
-    pdf_path = os.path.join(output_dir, "all_scatter_plots.pdf")
+    pdf_path = os.path.join(output_dir, "simple_scatter_plots.pdf")
     
     with PdfPages(pdf_path) as pdf:
         for i, x_col in enumerate(feature_cols, 1):
@@ -360,38 +294,38 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
                     y = df[y_col].values
                     
                     # 创建散点图
-                    ax.scatter(x, y, alpha=0.6, s=60, color='steelblue', 
+                    ax.scatter(x, y, alpha=0.7, s=80, color='steelblue', 
                              edgecolors='black', linewidth=0.5)
                     
-                    # 使用多模型拟合
-                    x_fit, y_fit, r2, best_model, model_results = fit_multiple_models(x, y)
+                    # 使用简单模型拟合
+                    x_fit, y_fit, r2, best_model, model_results = fit_simple_models(x, y)
                     
                     # 绘制最佳拟合线
                     if x_fit is not None and y_fit is not None:
                         # 根据模型类型设置颜色
                         color_map = {
                             'Linear': 'darkred',
-                            'Polynomial': 'red', 
-                            'RandomForest': 'green',
-                            'GradientBoosting': 'blue',
-                            'SVR': 'purple'
+                            'Polynomial': 'red'
                         }
                         color = color_map.get(best_model, 'darkred')
                         ax.plot(x_fit, y_fit, color=color, linewidth=2.5,
                                label=f'{best_model} (R² = {r2:.3f})')
                         
-                        # 添加模型比较信息到图例
+                        # 添加模型比较信息
                         if len(model_results) > 1:
-                            legend_text = f"Best: {best_model} (R² = {r2:.3f})\n"
-                            sorted_models = sorted(model_results.items(), key=lambda x: x[1]['r2'], reverse=True)
-                            for i, (name, result) in enumerate(sorted_models[:3]):  # 显示前3个最好的模型
-                                if i > 0:  # 跳过最佳模型（已经显示）
-                                    legend_text += f"{name}: R² = {result['r2']:.3f}\n"
+                            best_result = model_results[best_model]
+                            info_text = f"最佳: {best_model} (R² = {r2:.3f})\n"
+                            info_text += f"相关系数: {best_result['correlation']:.3f}\n"
                             
-                            # 创建文本框显示模型比较
-                            ax.text(0.02, 0.98, legend_text.strip(), transform=ax.transAxes, 
+                            # 显示两个模型的R²比较
+                            for name, result in model_results.items():
+                                if name != best_model:
+                                    info_text += f"{name}: R² = {result['r2']:.3f}"
+                            
+                            # 创建文本框显示信息
+                            ax.text(0.02, 0.98, info_text.strip(), transform=ax.transAxes, 
                                    fontsize=9, verticalalignment='top', 
-                                   bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+                                   bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
                     
                     # 设置标签和标题
                     ax.set_xlabel(x_col, fontsize=12, fontweight='bold')
@@ -423,17 +357,19 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
                     plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
                     plt.close()
                     
-                    # 记录结果
+                    # 记录结果，包含相关系数信息
+                    correlation = model_results[best_model]['correlation'] if model_results and best_model in model_results else 0.0
                     results.append({
                         'feature': x_col,
                         'performance': y_col,
                         'r2': r2,
+                        'correlation': correlation,
                         'best_model': best_model,
                         'filename': filename
                     })
                     
                     success_count += 1
-                    print(f" ✅ (R²={r2:.3f})")
+                    print(f" ✅ (R²={r2:.3f}, r={correlation:.3f})")
                     
                 except Exception as e:
                     print(f" ❌ 失败: {e}")
@@ -442,7 +378,7 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
     
     # 保存结果统计
     results_df = pd.DataFrame(results)
-    results_csv = os.path.join(output_dir, "plot_results_summary.csv")
+    results_csv = os.path.join(output_dir, "simple_plot_results_summary.csv")
     results_df.to_csv(results_csv, index=False)
     
     print(f"\n🎉 图表生成完成！")
@@ -456,8 +392,10 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
         print(f"\n📈 拟合质量统计:")
         print(f"   - 平均 R²: {results_df['r2'].mean():.3f}")
         print(f"   - 最高 R²: {results_df['r2'].max():.3f}")
+        print(f"   - 平均相关系数: {results_df['correlation'].mean():.3f}")
         print(f"   - R² > 0.5 的图表: {len(results_df[results_df['r2'] > 0.5])} 张")
         print(f"   - R² > 0.3 的图表: {len(results_df[results_df['r2'] > 0.3])} 张")
+        print(f"   - |相关系数| > 0.3 的图表: {len(results_df[abs(results_df['correlation']) > 0.3])} 张")
         
         print(f"\n🎯 最佳模型分布:")
         model_counts = results_df['best_model'].value_counts()
@@ -468,15 +406,22 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
         model_r2_avg = results_df.groupby('best_model')['r2'].mean().sort_values(ascending=False)
         for model, avg_r2 in model_r2_avg.items():
             print(f"   - {model}: {avg_r2:.3f}")
+        
+        # 显示最佳关系
+        print(f"\n🌟 最佳关系（按R²排序）:")
+        top_results = results_df.nlargest(10, 'r2')
+        for _, row in top_results.iterrows():
+            print(f"   {row['feature']} -> {row['performance']}: "
+                  f"R²={row['r2']:.3f}, r={row['correlation']:.3f}, {row['best_model']}")
     
     return results_df
 
 def main():
-    print("🚀 开始生成充电桩布局特征与性能指标散点图")
+    print("🚀 开始生成充电桩布局特征与性能指标散点图（简化版本）")
     
     # 设置路径
     data_file = "/home/ubuntu/project/MSC/Msc_Project/models/input/merged_dataset.csv"
-    output_dir = "/home/ubuntu/project/MSC/Msc_Project/models/plots"
+    output_dir = "/home/ubuntu/project/MSC/Msc_Project/models/plots_simple"
     
     print(f"📊 数据文件: {data_file}")
     print(f"📁 输出目录: {output_dir}")
@@ -502,10 +447,11 @@ def main():
     results_df = generate_all_plots(df, feature_cols, performance_cols, output_dir)
     
     if len(results_df) > 0:
-        print(f"\n🎓 论文用图表已生成完毕！")
+        print(f"\n🎓 简化版论文用图表已生成完毕！")
         print(f"📁 所有图表保存在: {output_dir}")
         print(f"📝 图表命名规则: 特征变量_性能指标.png")
         print(f"📑 PDF合集可直接用于论文插图")
+        print(f"💡 仅使用Linear和Polynomial回归，避免过拟合问题")
     else:
         print("❌ 没有成功生成任何图表")
         return 1

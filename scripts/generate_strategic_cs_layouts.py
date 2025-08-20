@@ -12,6 +12,7 @@
 import os
 import json
 import random
+import argparse
 import numpy as np
 import xml.etree.ElementTree as ET
 from typing import List, Dict, Tuple
@@ -119,8 +120,8 @@ class StrategicLayoutGenerator:
                          for edge_id in self.valid_edges]
         edge_distances.sort(key=lambda x: x[1])
         
-        # 选择距离最近的30%的边
-        center_ratio = 0.3
+        # 选择距离最近的60%的边
+        center_ratio = 0.6
         center_edge_count = max(cs_count, int(len(edge_distances) * center_ratio))
         center_edges = [item[0] for item in edge_distances[:center_edge_count]]
         
@@ -138,8 +139,8 @@ class StrategicLayoutGenerator:
                          for edge_id in self.valid_edges]
         edge_distances.sort(key=lambda x: x[1], reverse=True)
         
-        # 选择距离最远的30%的边
-        peripheral_ratio = 0.3
+        # 选择距离最远的60%的边
+        peripheral_ratio = 0.6
         peripheral_edge_count = max(cs_count, int(len(edge_distances) * peripheral_ratio))
         peripheral_edges = [item[0] for item in edge_distances[:peripheral_edge_count]]
         
@@ -376,25 +377,45 @@ class StrategicLayoutGenerator:
         
         return layout_data
     
-    def generate_all_layouts(self, cs_count: int = 215) -> Dict:
-        """生成所有类型的布局 (每种10个，共50个)"""
+    def generate_all_layouts(self, cs_count: int = 215, start_id: int = 51, layout_config: Dict = None) -> Dict:
+        """生成指定类型的布局
+        Args:
+            cs_count: 每个布局的充电桩数量
+            start_id: 起始布局ID
+            layout_config: 布局配置，格式为 {"layout_type": count, ...}
+        """
+        if layout_config is None:
+            # 默认配置：所有类型各10个
+            layout_config = {
+                "center_clustered": 10,
+                "peripheral_dispersed": 10,
+                "dual_center": 10,
+                "sparse": 10,
+                "dense": 10
+            }
+        
         layout_registry = {}
-        layout_counter = 51  # 从cs_group_051开始
+        layout_counter = start_id
         
-        layout_types = [
-            ("center_clustered", "中心集聚型", self.generate_center_clustered_layout),
-            ("peripheral_dispersed", "周边分散型", self.generate_peripheral_dispersed_layout),
-            ("dual_center", "双中心型", self.generate_dual_center_layout),
-            ("sparse", "稀疏型", self.generate_sparse_layout),
-            ("dense", "密集型", self.generate_dense_layout)
-        ]
+        layout_type_mapping = {
+            "center_clustered": ("center_clustered", "中心集聚型", self.generate_center_clustered_layout),
+            "peripheral_dispersed": ("peripheral_dispersed", "周边分散型", self.generate_peripheral_dispersed_layout),
+            "dual_center": ("dual_center", "双中心型", self.generate_dual_center_layout),
+            "sparse": ("sparse", "稀疏型", self.generate_sparse_layout),
+            "dense": ("dense", "密集型", self.generate_dense_layout)
+        }
         
-        for layout_type, type_name, generator_func in layout_types:
-            print(f"\n🎨 生成 {type_name} 布局 (10个)...")
+        for layout_type, count in layout_config.items():
+            if layout_type not in layout_type_mapping:
+                print(f"⚠️ 未知的布局类型: {layout_type}")
+                continue
+                
+            layout_key, type_name, generator_func = layout_type_mapping[layout_type]
+            print(f"\n🎨 生成 {type_name} 布局 ({count}个)...")
             
-            for i in range(10):
+            for i in range(count):
                 layout_id = f"cs_group_{layout_counter:03d}"
-                print(f"   🎯 生成 {layout_id} ({i+1}/10)")
+                print(f"   🎯 生成 {layout_id} ({i+1}/{count})")
                 
                 # 为每个布局设置不同的随机种子，确保多样性
                 random.seed(layout_counter * 100 + i)
@@ -403,7 +424,7 @@ class StrategicLayoutGenerator:
                 layout_data = generator_func(cs_count)
                 
                 layout_registry[layout_id] = {
-                    "layout_type": layout_type,
+                    "layout_type": layout_key,
                     "type_name": type_name,
                     "cs_count": len(layout_data),
                     "data": layout_data
@@ -415,31 +436,95 @@ class StrategicLayoutGenerator:
         return layout_registry
 
 def main():
-    print("🚀 开始生成战略性充电桩布局 (cs_group_051-100)")
+    parser = argparse.ArgumentParser(description='生成战略性充电桩布局')
+    parser.add_argument('--net_file', type=str,
+                       default="/home/ubuntu/project/MSC/Msc_Project/data/map/glasgow_clean.net.xml",
+                       help='网络文件路径')
+    parser.add_argument('--output_dir', type=str,
+                       default="/home/ubuntu/project/MSC/Msc_Project/data/cs_51-100",
+                       help='输出目录路径')
+    parser.add_argument('--start_id', type=int, default=51,
+                       help='起始布局ID (默认: 51)')
+    parser.add_argument('--end_id', type=int, default=100,
+                       help='结束布局ID (默认: 100)')
+    parser.add_argument('--cs_count', type=int, default=215,
+                       help='每个布局的充电桩数量 (默认: 215)')
+    parser.add_argument('--center_count', type=int, default=10,
+                       help='中心集聚型布局数量 (默认: 10)')
+    parser.add_argument('--peripheral_count', type=int, default=10,
+                       help='周边分散型布局数量 (默认: 10)')
+    parser.add_argument('--dual_count', type=int, default=10,
+                       help='双中心型布局数量 (默认: 10)')
+    parser.add_argument('--sparse_count', type=int, default=10,
+                       help='稀疏型布局数量 (默认: 10)')
+    parser.add_argument('--dense_count', type=int, default=10,
+                       help='密集型布局数量 (默认: 10)')
+    
+    args = parser.parse_args()
+    
+    # 根据start_id和end_id推断输出文件名
+    if args.start_id == 51 and args.end_id == 70:
+        # 特殊情况：只生成51-70
+        output_file_suffix = "51-70"
+        default_config = {
+            "center_clustered": args.center_count,
+            "peripheral_dispersed": args.peripheral_count
+        }
+    elif args.start_id == 51 and args.end_id == 100:
+        # 默认情况：生成51-100
+        output_file_suffix = "51-100"
+        default_config = {
+            "center_clustered": args.center_count,
+            "peripheral_dispersed": args.peripheral_count,
+            "dual_center": args.dual_count,
+            "sparse": args.sparse_count,
+            "dense": args.dense_count
+        }
+    else:
+        # 自定义范围
+        output_file_suffix = f"{args.start_id}-{args.end_id}"
+        default_config = {
+            "center_clustered": args.center_count,
+            "peripheral_dispersed": args.peripheral_count,
+            "dual_center": args.dual_count,
+            "sparse": args.sparse_count,
+            "dense": args.dense_count
+        }
+    
+    print(f"🚀 开始生成战略性充电桩布局 (cs_group_{args.start_id:03d}-{args.end_id:03d})")
     
     # 设置路径
-    net_file = "/home/ubuntu/project/MSC/Msc_Project/data/map/glasgow_clean.net.xml"
-    output_dir = "/home/ubuntu/project/MSC/Msc_Project/data/cs_51-100"
-    output_file = os.path.join(output_dir, "cs_candidates_51-100.json")
+    output_dir = args.output_dir
+    output_file = os.path.join(output_dir, f"cs_candidates_{output_file_suffix}.json")
     
     # 创建输出目录
     os.makedirs(output_dir, exist_ok=True)
     
-    print(f"📁 网络文件: {net_file}")
+    print(f"📁 网络文件: {args.net_file}")
     print(f"📁 输出目录: {output_dir}")
     print(f"💾 输出文件: {output_file}")
     
     # 检查网络文件是否存在
-    if not os.path.exists(net_file):
-        print(f"❌ 网络文件不存在: {net_file}")
+    if not os.path.exists(args.net_file):
+        print(f"❌ 网络文件不存在: {args.net_file}")
+        parser.print_help()
+        print("\n💡 使用示例:")
+        print("   # 生成cs_group_051-070 (10个中心集聚型 + 10个周边分散型)")
+        print("   python scripts/generate_strategic_cs_layouts.py --start_id 51 --end_id 70 --output_dir data/cs_51-70 --center_count 10 --peripheral_count 10 --dual_count 0 --sparse_count 0 --dense_count 0")
+        print("\n   # 生成cs_group_051-100 (所有类型各10个)")
+        print("   python scripts/generate_strategic_cs_layouts.py --start_id 51 --end_id 100 --output_dir data/cs_51-100")
         return 1
     
     try:
         # 创建生成器
-        generator = StrategicLayoutGenerator(net_file)
+        generator = StrategicLayoutGenerator(args.net_file)
         
-        # 生成所有布局
-        layout_registry = generator.generate_all_layouts(cs_count=215)
+        # 生成指定布局
+        layout_registry = generator.generate_all_layouts(
+            cs_count=args.cs_count, 
+            start_id=args.start_id, 
+            layout_config=default_config
+        )
         
         # 转换为候选格式（只保留data部分）
         candidates_data = {}
@@ -451,7 +536,7 @@ def main():
             json.dump(candidates_data, f, indent=2, ensure_ascii=False)
         
         # 保存完整的布局信息（包含类型信息）
-        registry_file = os.path.join(output_dir, "layout_registry_51-100.json")
+        registry_file = os.path.join(output_dir, f"layout_registry_{output_file_suffix}.json")
         with open(registry_file, 'w', encoding='utf-8') as f:
             json.dump(layout_registry, f, indent=2, ensure_ascii=False)
         
@@ -469,7 +554,9 @@ def main():
         for type_name, count in type_counts.items():
             print(f"   - {type_name}: {count} 个")
         
-        print(f"\n🏷️ 布局ID范围: cs_group_051 - cs_group_100")
+        start_layout = f"cs_group_{args.start_id:03d}"
+        end_layout = f"cs_group_{args.start_id + len(layout_registry) - 1:03d}"
+        print(f"\n🏷️ 布局ID范围: {start_layout} - {end_layout}")
         
         return 0
         

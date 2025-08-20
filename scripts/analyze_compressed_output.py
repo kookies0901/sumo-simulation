@@ -386,9 +386,15 @@ def check_scenario_files(scenario_id, output_dir):
     
     return len(missing_files) == 0, missing_files
 
-def batch_analyze_scenarios(scenario_ids, output_dir, result_dir=None):
-    """批量分析多个场景"""
-    logging.info(f"🚀 开始批量分析 {len(scenario_ids)} 个场景")
+def batch_analyze_scenarios(scenario_ids, output_dir, result_dir=None, append_mode=False):
+    """批量分析多个场景
+    Args:
+        scenario_ids: 场景ID列表
+        output_dir: SUMO输出目录
+        result_dir: 结果保存目录
+        append_mode: 是否为追加模式，True时会将结果追加到现有CSV文件
+    """
+    logging.info(f"🚀 开始批量分析 {len(scenario_ids)} 个场景 {'(追加模式)' if append_mode else ''}")
     
     # 首先检查所有场景的文件可用性
     logging.info("🔍 检查场景文件可用性...")
@@ -447,8 +453,43 @@ def batch_analyze_scenarios(scenario_ids, output_dir, result_dir=None):
         
         # 保存所有结果到CSV
         batch_result_file = os.path.join(result_dir, "batch_charging_analysis.csv")
-        df = pd.DataFrame(all_results)
-        df.to_csv(batch_result_file, index=False)
+        df_new = pd.DataFrame(all_results)
+        
+        if append_mode and os.path.exists(batch_result_file):
+            # 追加模式：读取现有文件并合并
+            logging.info(f"📁 追加模式：读取现有文件 {batch_result_file}")
+            try:
+                df_existing = pd.read_csv(batch_result_file)
+                
+                # 检查重复的scenario_id，避免重复数据
+                existing_scenarios = set(df_existing['scenario_id'].tolist())
+                new_scenarios = set(df_new['scenario_id'].tolist())
+                
+                duplicates = existing_scenarios.intersection(new_scenarios)
+                if duplicates:
+                    logging.warning(f"⚠️ 发现重复场景，将跳过: {sorted(list(duplicates))}")
+                    # 过滤掉重复的场景
+                    df_new = df_new[~df_new['scenario_id'].isin(duplicates)]
+                
+                if not df_new.empty:
+                    # 合并数据
+                    df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+                    # 按scenario_id排序
+                    df_combined = df_combined.sort_values('scenario_id').reset_index(drop=True)
+                    df_combined.to_csv(batch_result_file, index=False)
+                    
+                    logging.info(f"✅ 追加了 {len(df_new)} 个新场景到现有文件")
+                    logging.info(f"📊 文件现有场景总数: {len(df_combined)}")
+                else:
+                    logging.info("ℹ️ 所有场景都已存在，无需追加")
+                    
+            except Exception as e:
+                logging.error(f"❌ 追加模式失败，使用覆盖模式: {e}")
+                df_new.to_csv(batch_result_file, index=False)
+        else:
+            # 覆盖模式：直接保存
+            df_new.to_csv(batch_result_file, index=False)
+            logging.info(f"✅ 保存了 {len(df_new)} 个场景的分析结果")
         
         # 保存汇总统计
         summary_file = os.path.join(result_dir, "batch_summary.csv")
@@ -504,6 +545,8 @@ def main():
                        help='场景矩阵文件路径，用于批量处理')
     parser.add_argument('--all', action='store_true',
                        help='处理所有可用场景 (自动检测)')
+    parser.add_argument('--append', action='store_true',
+                       help='追加模式：将结果追加到现有的batch_charging_analysis.csv文件中，避免重复场景')
     
     args = parser.parse_args()
     
@@ -541,7 +584,7 @@ def main():
             sys.exit(1)
         
         # 执行批量分析
-        batch_analyze_scenarios(scenario_ids, args.output_dir, args.result_dir)
+        batch_analyze_scenarios(scenario_ids, args.output_dir, args.result_dir, append_mode=args.append)
         
     elif args.scenario_id:
         # 单个场景处理模式
@@ -613,10 +656,14 @@ def main():
         print("   python analyze_compressed_output.py --scenario_id S001")
         print("\n   # 批量处理S001-S050")
         print("   python analyze_compressed_output.py --batch --start_id S001 --end_id S050")
+        print("\n   # 批量处理S051-S070并追加到现有文件")
+        print("   python analyze_compressed_output.py --batch --start_id S051 --end_id S070 --append")
         print("\n   # 从场景矩阵文件批量处理")
         print("   python analyze_compressed_output.py --matrix data/scenario_matrix.csv")
         print("\n   # 自动检测并处理所有场景")
         print("   python analyze_compressed_output.py --all")
+        print("\n   # 追加模式：将新场景添加到现有批量分析文件")
+        print("   python analyze_compressed_output.py --batch --start_id S051 --end_id S100 --append")
 
 if __name__ == '__main__':
     main() 

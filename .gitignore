@@ -7,4 +7,5 @@ sumo/
 logs/
 venv/
 data/cs_1-50/
+data/cs_51-70/
 models/

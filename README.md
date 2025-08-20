@@ -518,7 +518,16 @@ python scripts/run_global_simulation.py --matrix my_matrix.csv --output_dir my_r
 python scripts/analyze_compressed_output.py --scenario_id S001
 
 # 处理S001-S050
-python scripts/analyze_compressed_output.py --batch
+python scripts/analyze_compressed_output.py --
+
+# 将S051-S070范围的场景追加到现有文件
+python scripts/analyze_compressed_output.py --batch --start_id S051 --end_id S096 --append
+
+# 处理单个场景并追加
+python scripts/analyze_compressed_output.py --batch --start_id S065 --end_id S065 --append
+
+# 从指定范围追加（比如S071-S100）
+python scripts/analyze_compressed_output.py --batch --start_id S071 --end_id S100 --append
 
 # 处理S001-S010
 python scripts/analyze_compressed_output.py --start_id S001 --end_id S010
@@ -530,8 +539,9 @@ python scripts/analyze_compressed_output.py --matrix data/scenario_matrix.csv
 python scripts/analyze_compressed_output.py --all
 ```
 
-python scripts/extract_layout_features.py --layout_file data/cs_51-100/cs_candidates_51-100.json
+python scripts/extract_layout_features.py --layout_file data/cs_51-70/cs_candidates_51-70.json
 
+python scripts/generator_charging_site.py --json_file data/cs_51-70/cs_candidates_51-70.json
 
 
 ## �� 完整工作流程示例
