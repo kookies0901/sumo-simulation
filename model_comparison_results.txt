@@ -1,0 +1,1619 @@
+🔍 开始简单回归分析 - 与generate_graphs_simple.py保持一致的方法
+📊 数据文件: /home/ubuntu/project/MSC/Msc_Project/models/input_1-100/merged_dataset.csv
+📁 输出目录: /home/ubuntu/project/MSC/Msc_Project/models/analysis_simple_v2
+✅ 数据加载成功: 81 行, 32 列
+📊 布局特征: 10 个
+📈 性能指标: 8 个
+💡 使用Linear和Polynomial回归模型（与generate_graphs_simple.py一致）
+
+🔍 开始分析 80 个组合...
+
+[1/10] 处理特征: avg_dist_to_center
+
+📊 分析: avg_dist_to_center vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.1192, p-value = 0.2890
+   Linear回归:
+     训练 R²: 0.0142
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0142
+   Polynomial回归:
+     训练 R²: 0.4904
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4904
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.0443
+     X范围/均值: 1.2224
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0446, p-value = 0.6929
+   Linear回归:
+     训练 R²: 0.0020
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0020
+   Polynomial回归:
+     训练 R²: 0.1781
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1781
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.1315
+     X范围/均值: 1.2224
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1265, p-value = 0.2604
+   Linear回归:
+     训练 R²: 0.0160
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0160
+   Polynomial回归:
+     训练 R²: 0.7913
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.7913
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.1378
+     X范围/均值: 1.2224
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1442, p-value = 0.1990
+   Linear回归:
+     训练 R²: 0.0208
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0208
+   Polynomial回归:
+     训练 R²: 0.4926
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4926
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.0834
+     X范围/均值: 1.2224
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1559, p-value = 0.1647
+   Linear回归:
+     训练 R²: 0.0243
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0243
+   Polynomial回归:
+     训练 R²: 0.6033
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.6033
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.1215
+     X范围/均值: 1.2224
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0569, p-value = 0.6140
+   Linear回归:
+     训练 R²: 0.0032
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0032
+   Polynomial回归:
+     训练 R²: 0.8663
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.8663
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.0973
+     X范围/均值: 1.2224
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0164, p-value = 0.8844
+   Linear回归:
+     训练 R²: 0.0003
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0003
+   Polynomial回归:
+     训练 R²: 0.0026
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0026
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.0045
+     X范围/均值: 1.2224
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_dist_to_center vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0110, p-value = 0.9227
+   Linear回归:
+     训练 R²: 0.0001
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0001
+   Polynomial回归:
+     训练 R²: 0.7996
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.7996
+   数据特征:
+     X变异系数: 0.1953
+     Y变异系数: 0.0756
+     X范围/均值: 1.2224
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+[2/10] 处理特征: std_nearest_neighbor
+
+📊 分析: std_nearest_neighbor vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.1538, p-value = 0.1704
+   Linear回归:
+     训练 R²: 0.0237
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0237
+   Polynomial回归:
+     训练 R²: 0.5179
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5179
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.0443
+     X范围/均值: 1.3179
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0264, p-value = 0.8152
+   Linear回归:
+     训练 R²: 0.0007
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0007
+   Polynomial回归:
+     训练 R²: 0.1751
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1751
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.1315
+     X范围/均值: 1.3179
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1060, p-value = 0.3463
+   Linear回归:
+     训练 R²: 0.0112
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0112
+   Polynomial回归:
+     训练 R²: 0.8063
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.8063
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.1378
+     X范围/均值: 1.3179
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1213, p-value = 0.2808
+   Linear回归:
+     训练 R²: 0.0147
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0147
+   Polynomial回归:
+     训练 R²: 0.5320
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5320
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.0834
+     X范围/均值: 1.3179
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1617, p-value = 0.1493
+   Linear回归:
+     训练 R²: 0.0261
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0261
+   Polynomial回归:
+     训练 R²: 0.5655
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5655
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.1215
+     X范围/均值: 1.3179
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0489, p-value = 0.6648
+   Linear回归:
+     训练 R²: 0.0024
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0024
+   Polynomial回归:
+     训练 R²: 0.8396
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.8396
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.0973
+     X范围/均值: 1.3179
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0333, p-value = 0.7681
+   Linear回归:
+     训练 R²: 0.0011
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0011
+   Polynomial回归:
+     训练 R²: 0.0068
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0068
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.0045
+     X范围/均值: 1.3179
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: std_nearest_neighbor vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0276, p-value = 0.8069
+   Linear回归:
+     训练 R²: 0.0008
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0008
+   Polynomial回归:
+     训练 R²: 0.7994
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.7994
+   数据特征:
+     X变异系数: 0.2048
+     Y变异系数: 0.0756
+     X范围/均值: 1.3179
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+[3/10] 处理特征: min_distance
+
+📊 分析: min_distance vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1882, p-value = 0.0925
+   Linear回归:
+     训练 R²: 0.0354
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0354
+   Polynomial回归:
+     训练 R²: 0.0452
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0452
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.0443
+     X范围/均值: 4.0328
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: min_distance vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1863, p-value = 0.0959
+   Linear回归:
+     训练 R²: 0.0347
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0347
+   Polynomial回归:
+     训练 R²: 0.0481
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0481
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.1315
+     X范围/均值: 4.0328
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: min_distance vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.2207, p-value = 0.0477
+   Linear回归:
+     训练 R²: 0.0487
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0487
+   Polynomial回归:
+     训练 R²: 0.0900
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0900
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.1378
+     X范围/均值: 4.0328
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: min_distance vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1434, p-value = 0.2015
+   Linear回归:
+     训练 R²: 0.0206
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0206
+   Polynomial回归:
+     训练 R²: 0.0800
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0800
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.0834
+     X范围/均值: 4.0328
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: min_distance vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.2384, p-value = 0.0321
+   Linear回归:
+     训练 R²: 0.0568
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0568
+   Polynomial回归:
+     训练 R²: 0.1128
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1128
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.1215
+     X范围/均值: 4.0328
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: min_distance vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = 0.1665, p-value = 0.1375
+   Linear回归:
+     训练 R²: 0.0277
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0277
+   Polynomial回归:
+     训练 R²: 0.0528
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0528
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.0973
+     X范围/均值: 4.0328
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: min_distance vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = -0.1072, p-value = 0.3407
+   Linear回归:
+     训练 R²: 0.0115
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0115
+   Polynomial回归:
+     训练 R²: 0.0203
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0203
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.0045
+     X范围/均值: 4.0328
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: min_distance vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = 0.1889, p-value = 0.0913
+   Linear回归:
+     训练 R²: 0.0357
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0357
+   Polynomial回归:
+     训练 R²: 0.0472
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0472
+   数据特征:
+     X变异系数: 0.8096
+     Y变异系数: 0.0756
+     X范围/均值: 4.0328
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+[4/10] 处理特征: max_pairwise_distance
+
+📊 分析: max_pairwise_distance vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.2641, p-value = 0.0172
+   Linear回归:
+     训练 R²: 0.0698
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0698
+   Polynomial回归:
+     训练 R²: 0.1352
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1352
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.0443
+     X范围/均值: 1.0360
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: max_pairwise_distance vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.2265, p-value = 0.0420
+   Linear回归:
+     训练 R²: 0.0513
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0513
+   Polynomial回归:
+     训练 R²: 0.0597
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0597
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.1315
+     X范围/均值: 1.0360
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: max_pairwise_distance vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5694, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3242
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3242
+   Polynomial回归:
+     训练 R²: 0.4478
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4478
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.1378
+     X范围/均值: 1.0360
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_pairwise_distance vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5277, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2784
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2784
+   Polynomial回归:
+     训练 R²: 0.2880
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2880
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.0834
+     X范围/均值: 1.0360
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: max_pairwise_distance vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5320, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2831
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2831
+   Polynomial回归:
+     训练 R²: 0.3462
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3462
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.1215
+     X范围/均值: 1.0360
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_pairwise_distance vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = 0.5153, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2655
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2655
+   Polynomial回归:
+     训练 R²: 0.4473
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4473
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.0973
+     X范围/均值: 1.0360
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_pairwise_distance vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0369, p-value = 0.7438
+   Linear回归:
+     训练 R²: 0.0014
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0014
+   Polynomial回归:
+     训练 R²: 0.0146
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0146
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.0045
+     X范围/均值: 1.0360
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: max_pairwise_distance vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = 0.4505, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2029
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2029
+   Polynomial回归:
+     训练 R²: 0.3898
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3898
+   数据特征:
+     X变异系数: 0.1634
+     Y变异系数: 0.0756
+     X范围/均值: 1.0360
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+[5/10] 处理特征: cs_density_std
+
+📊 分析: cs_density_std vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.3856, p-value = 0.0004
+   Linear回归:
+     训练 R²: 0.1487
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1487
+   Polynomial回归:
+     训练 R²: 0.1758
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1758
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.0443
+     X范围/均值: 7.2844
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: cs_density_std vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.3143, p-value = 0.0043
+   Linear回归:
+     训练 R²: 0.0988
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0988
+   Polynomial回归:
+     训练 R²: 0.2154
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2154
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.1315
+     X范围/均值: 7.2844
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: cs_density_std vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.6955, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.4837
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4837
+   Polynomial回归:
+     训练 R²: 0.6164
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.6164
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.1378
+     X范围/均值: 7.2844
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cs_density_std vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.5820, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3388
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3388
+   Polynomial回归:
+     训练 R²: 0.3980
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3980
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.0834
+     X范围/均值: 7.2844
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cs_density_std vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.6141, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3772
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3772
+   Polynomial回归:
+     训练 R²: 0.5025
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5025
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.1215
+     X范围/均值: 7.2844
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cs_density_std vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = -0.6719, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.4515
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4515
+   Polynomial回归:
+     训练 R²: 0.5084
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5084
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.0973
+     X范围/均值: 7.2844
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cs_density_std vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0069, p-value = 0.9514
+   Linear回归:
+     训练 R²: 0.0000
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0000
+   Polynomial回归:
+     训练 R²: 0.0044
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0044
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.0045
+     X范围/均值: 7.2844
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: cs_density_std vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5966, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3559
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3559
+   Polynomial回归:
+     训练 R²: 0.3836
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3836
+   数据特征:
+     X变异系数: 1.2278
+     Y变异系数: 0.0756
+     X范围/均值: 7.2844
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+[6/10] 处理特征: cluster_count
+
+📊 分析: cluster_count vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.4233, p-value = 0.0001
+   Linear回归:
+     训练 R²: 0.1792
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1792
+   Polynomial回归:
+     训练 R²: 0.1793
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1793
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.0443
+     X范围/均值: 1.2389
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: cluster_count vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.3470, p-value = 0.0015
+   Linear回归:
+     训练 R²: 0.1204
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1204
+   Polynomial回归:
+     训练 R²: 0.1315
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1315
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.1315
+     X范围/均值: 1.2389
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: cluster_count vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.7677, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.5894
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5894
+   Polynomial回归:
+     训练 R²: 0.5894
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5894
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.1378
+     X范围/均值: 1.2389
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cluster_count vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5992, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3590
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3590
+   Polynomial回归:
+     训练 R²: 0.3643
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3643
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.0834
+     X范围/均值: 1.2389
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cluster_count vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.6829, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.4663
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4663
+   Polynomial回归:
+     训练 R²: 0.4686
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4686
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.1215
+     X范围/均值: 1.2389
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cluster_count vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = 0.7431, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.5522
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5522
+   Polynomial回归:
+     训练 R²: 0.5523
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5523
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.0973
+     X范围/均值: 1.2389
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: cluster_count vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0655, p-value = 0.5612
+   Linear回归:
+     训练 R²: 0.0043
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0043
+   Polynomial回归:
+     训练 R²: 0.0096
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0096
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.0045
+     X范围/均值: 1.2389
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: cluster_count vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = 0.6346, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.4028
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4028
+   Polynomial回归:
+     训练 R²: 0.4061
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4061
+   数据特征:
+     X变异系数: 0.2205
+     Y变异系数: 0.0756
+     X范围/均值: 1.2389
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+[7/10] 处理特征: coverage_ratio
+
+📊 分析: coverage_ratio vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.2706, p-value = 0.0146
+   Linear回归:
+     训练 R²: 0.0732
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0732
+   Polynomial回归:
+     训练 R²: 0.1796
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1796
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.0443
+     X范围/均值: 1.1160
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: coverage_ratio vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.2336, p-value = 0.0359
+   Linear回归:
+     训练 R²: 0.0546
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0546
+   Polynomial回归:
+     训练 R²: 0.0811
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0811
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.1315
+     X范围/均值: 1.1160
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: coverage_ratio vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.6181, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3821
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3821
+   Polynomial回归:
+     训练 R²: 0.5591
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5591
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.1378
+     X范围/均值: 1.1160
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: coverage_ratio vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.4631, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2144
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2144
+   Polynomial回归:
+     训练 R²: 0.4428
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4428
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.0834
+     X范围/均值: 1.1160
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: coverage_ratio vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5303, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2812
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2812
+   Polynomial回归:
+     训练 R²: 0.4243
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4243
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.1215
+     X范围/均值: 1.1160
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: coverage_ratio vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = 0.5685, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3232
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3232
+   Polynomial回归:
+     训练 R²: 0.5186
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5186
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.0973
+     X范围/均值: 1.1160
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: coverage_ratio vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0372, p-value = 0.7418
+   Linear回归:
+     训练 R²: 0.0014
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0014
+   Polynomial回归:
+     训练 R²: 0.0019
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0019
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.0045
+     X范围/均值: 1.1160
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: coverage_ratio vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = 0.4966, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2466
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2466
+   Polynomial回归:
+     训练 R²: 0.4223
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4223
+   数据特征:
+     X变异系数: 0.1805
+     Y变异系数: 0.0756
+     X范围/均值: 1.1160
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+[8/10] 处理特征: max_gap_distance
+
+📊 分析: max_gap_distance vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.3192, p-value = 0.0037
+   Linear回归:
+     训练 R²: 0.1019
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1019
+   Polynomial回归:
+     训练 R²: 0.1449
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1449
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.0443
+     X范围/均值: 4.1342
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: max_gap_distance vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.3752, p-value = 0.0006
+   Linear回归:
+     训练 R²: 0.1408
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1408
+   Polynomial回归:
+     训练 R²: 0.1509
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1509
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.1315
+     X范围/均值: 4.1342
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: max_gap_distance vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.6672, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.4452
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4452
+   Polynomial回归:
+     训练 R²: 0.5142
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.5142
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.1378
+     X范围/均值: 4.1342
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_gap_distance vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.5984, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3581
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3581
+   Polynomial回归:
+     训练 R²: 0.3636
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3636
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.0834
+     X范围/均值: 4.1342
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_gap_distance vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.6049, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3659
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3659
+   Polynomial回归:
+     训练 R²: 0.4117
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4117
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.1215
+     X范围/均值: 4.1342
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_gap_distance vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = -0.5992, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3591
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3591
+   Polynomial回归:
+     训练 R²: 0.4836
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4836
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.0973
+     X范围/均值: 4.1342
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: max_gap_distance vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0707, p-value = 0.5305
+   Linear回归:
+     训练 R²: 0.0050
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0050
+   Polynomial回归:
+     训练 R²: 0.0181
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0181
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.0045
+     X范围/均值: 4.1342
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: max_gap_distance vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = -0.4802, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.2306
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.2306
+   Polynomial回归:
+     训练 R²: 0.4335
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.4335
+   数据特征:
+     X变异系数: 0.7078
+     Y变异系数: 0.0756
+     X范围/均值: 4.1342
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+[9/10] 处理特征: gini_coefficient
+
+📊 分析: gini_coefficient vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.2314, p-value = 0.0377
+   Linear回归:
+     训练 R²: 0.0535
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0535
+   Polynomial回归:
+     训练 R²: 0.0546
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0546
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.0443
+     X范围/均值: 0.7820
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: gini_coefficient vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.2978, p-value = 0.0069
+   Linear回归:
+     训练 R²: 0.0887
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0887
+   Polynomial回归:
+     训练 R²: 0.1170
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1170
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.1315
+     X范围/均值: 0.7820
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: gini_coefficient vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.5691, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3239
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3239
+   Polynomial回归:
+     训练 R²: 0.3280
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3280
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.1378
+     X范围/均值: 0.7820
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: gini_coefficient vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.4127, p-value = 0.0001
+   Linear回归:
+     训练 R²: 0.1703
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1703
+   Polynomial回归:
+     训练 R²: 0.1705
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1705
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.0834
+     X范围/均值: 0.7820
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: gini_coefficient vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.5841, p-value = 0.0000
+   Linear回归:
+     训练 R²: 0.3412
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3412
+   Polynomial回归:
+     训练 R²: 0.3421
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.3421
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.1215
+     X范围/均值: 0.7820
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 过拟合严重
+
+📊 分析: gini_coefficient vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = -0.4302, p-value = 0.0001
+   Linear回归:
+     训练 R²: 0.1851
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1851
+   Polynomial回归:
+     训练 R²: 0.1864
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1864
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.0973
+     X范围/均值: 0.7820
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+📊 分析: gini_coefficient vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0186, p-value = 0.8693
+   Linear回归:
+     训练 R²: 0.0003
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0003
+   Polynomial回归:
+     训练 R²: 0.0016
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0016
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.0045
+     X范围/均值: 0.7820
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: gini_coefficient vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = -0.3521, p-value = 0.0013
+   Linear回归:
+     训练 R²: 0.1240
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1240
+   Polynomial回归:
+     训练 R²: 0.1245
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.1245
+   数据特征:
+     X变异系数: 0.1344
+     Y变异系数: 0.0756
+     X范围/均值: 0.7820
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 模型效果差
+
+[10/10] 处理特征: avg_betweenness_centrality
+
+📊 分析: avg_betweenness_centrality vs duration_mean
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0802, p-value = 0.4769
+   Linear回归:
+     训练 R²: 0.0064
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0064
+   Polynomial回归:
+     训练 R²: 0.0085
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0085
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.0443
+     X范围/均值: 1.6343
+     Y范围/均值: 0.1981
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs waiting_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0617, p-value = 0.5843
+   Linear回归:
+     训练 R²: 0.0038
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0038
+   Polynomial回归:
+     训练 R²: 0.0168
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0168
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.1315
+     X范围/均值: 1.6343
+     Y范围/均值: 0.7438
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs charging_time_mean
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0445, p-value = 0.6931
+   Linear回归:
+     训练 R²: 0.0020
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0020
+   Polynomial回归:
+     训练 R²: 0.0023
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0023
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.1378
+     X范围/均值: 1.6343
+     Y范围/均值: 0.5870
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs energy_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0070, p-value = 0.9506
+   Linear回归:
+     训练 R²: 0.0000
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0000
+   Polynomial回归:
+     训练 R²: 0.0033
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0033
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.0834
+     X范围/均值: 1.6343
+     Y范围/均值: 0.4120
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs vehicle_gini
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0351, p-value = 0.7559
+   Linear回归:
+     训练 R²: 0.0012
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0012
+   Polynomial回归:
+     训练 R²: 0.0016
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0016
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.1215
+     X范围/均值: 1.6343
+     Y范围/均值: 0.6231
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs charging_station_coverage
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0147, p-value = 0.8962
+   Linear回归:
+     训练 R²: 0.0002
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0002
+   Polynomial回归:
+     训练 R²: 0.0007
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0007
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.0973
+     X范围/均值: 1.6343
+     Y范围/均值: 0.4249
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs reroute_count
+   样本数量: 81
+   皮尔逊相关系数: r = -0.0019, p-value = 0.9869
+   Linear回归:
+     训练 R²: 0.0000
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0000
+   Polynomial回归:
+     训练 R²: 0.0022
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0022
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.0045
+     X范围/均值: 1.6343
+     Y范围/均值: 0.0245
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+📊 分析: avg_betweenness_centrality vs ev_charging_participation_rate
+   样本数量: 81
+   皮尔逊相关系数: r = 0.0439, p-value = 0.6970
+   Linear回归:
+     训练 R²: 0.0019
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0019
+   Polynomial回归:
+     训练 R²: 0.0070
+     交叉验证 R²: 0.0000 ± 0.0000
+     过拟合程度: 0.0070
+   数据特征:
+     X变异系数: 0.3359
+     Y变异系数: 0.0756
+     X范围/均值: 1.6343
+     Y范围/均值: 0.3551
+   最佳模型: Polynomial
+   模型质量: 弱相关
+
+🎉 分析完成！
+📊 总共分析: 80 个关系
+💾 结果保存到: /home/ubuntu/project/MSC/Msc_Project/models/analysis_simple_v2/regression_analysis_results_v2.csv
+
+📈 质量分布:
+   弱相关: 36 个
+   过拟合严重: 26 个
+   模型效果差: 18 个
+
+🏆 最佳关系 (按训练R²排序):
+   avg_dist_to_center -> charging_station_coverage: 训练 R² = 0.8663, CV R² = 0.0000, 过拟合 = 0.8663, 模型 = Polynomial, 质量 = 弱相关
+   std_nearest_neighbor -> charging_station_coverage: 训练 R² = 0.8396, CV R² = 0.0000, 过拟合 = 0.8396, 模型 = Polynomial, 质量 = 弱相关
+   std_nearest_neighbor -> charging_time_mean: 训练 R² = 0.8063, CV R² = 0.0000, 过拟合 = 0.8063, 模型 = Polynomial, 质量 = 弱相关
+   avg_dist_to_center -> ev_charging_participation_rate: 训练 R² = 0.7996, CV R² = 0.0000, 过拟合 = 0.7996, 模型 = Polynomial, 质量 = 弱相关
+   std_nearest_neighbor -> ev_charging_participation_rate: 训练 R² = 0.7994, CV R² = 0.0000, 过拟合 = 0.7994, 模型 = Polynomial, 质量 = 弱相关
+   avg_dist_to_center -> charging_time_mean: 训练 R² = 0.7913, CV R² = 0.0000, 过拟合 = 0.7913, 模型 = Polynomial, 质量 = 弱相关
+   cs_density_std -> charging_time_mean: 训练 R² = 0.6164, CV R² = 0.0000, 过拟合 = 0.6164, 模型 = Polynomial, 质量 = 过拟合严重
+   avg_dist_to_center -> vehicle_gini: 训练 R² = 0.6033, CV R² = 0.0000, 过拟合 = 0.6033, 模型 = Polynomial, 质量 = 弱相关
+   cluster_count -> charging_time_mean: 训练 R² = 0.5894, CV R² = 0.0000, 过拟合 = 0.5894, 模型 = Polynomial, 质量 = 过拟合严重
+   std_nearest_neighbor -> vehicle_gini: 训练 R² = 0.5655, CV R² = 0.0000, 过拟合 = 0.5655, 模型 = Polynomial, 质量 = 弱相关
+
+📊 模型分布:
+   Polynomial: 80 个
+
+⚠️ 过拟合严重的关系:
+   avg_dist_to_center -> duration_mean: 过拟合 = 0.4904, 模型 = Polynomial
+   avg_dist_to_center -> charging_time_mean: 过拟合 = 0.7913, 模型 = Polynomial
+   avg_dist_to_center -> energy_gini: 过拟合 = 0.4926, 模型 = Polynomial
+   avg_dist_to_center -> vehicle_gini: 过拟合 = 0.6033, 模型 = Polynomial
+   avg_dist_to_center -> charging_station_coverage: 过拟合 = 0.8663, 模型 = Polynomial
+   avg_dist_to_center -> ev_charging_participation_rate: 过拟合 = 0.7996, 模型 = Polynomial
+   std_nearest_neighbor -> duration_mean: 过拟合 = 0.5179, 模型 = Polynomial
+   std_nearest_neighbor -> charging_time_mean: 过拟合 = 0.8063, 模型 = Polynomial
+   std_nearest_neighbor -> energy_gini: 过拟合 = 0.5320, 模型 = Polynomial
+   std_nearest_neighbor -> vehicle_gini: 过拟合 = 0.5655, 模型 = Polynomial
+   std_nearest_neighbor -> charging_station_coverage: 过拟合 = 0.8396, 模型 = Polynomial
+   std_nearest_neighbor -> ev_charging_participation_rate: 过拟合 = 0.7994, 模型 = Polynomial
+   max_pairwise_distance -> charging_time_mean: 过拟合 = 0.4478, 模型 = Polynomial
+   max_pairwise_distance -> energy_gini: 过拟合 = 0.2880, 模型 = Polynomial
+   max_pairwise_distance -> vehicle_gini: 过拟合 = 0.3462, 模型 = Polynomial
+   max_pairwise_distance -> charging_station_coverage: 过拟合 = 0.4473, 模型 = Polynomial
+   max_pairwise_distance -> ev_charging_participation_rate: 过拟合 = 0.3898, 模型 = Polynomial
+   cs_density_std -> waiting_time_mean: 过拟合 = 0.2154, 模型 = Polynomial
+   cs_density_std -> charging_time_mean: 过拟合 = 0.6164, 模型 = Polynomial
+   cs_density_std -> energy_gini: 过拟合 = 0.3980, 模型 = Polynomial
+   cs_density_std -> vehicle_gini: 过拟合 = 0.5025, 模型 = Polynomial
+   cs_density_std -> charging_station_coverage: 过拟合 = 0.5084, 模型 = Polynomial
+   cs_density_std -> ev_charging_participation_rate: 过拟合 = 0.3836, 模型 = Polynomial
+   cluster_count -> charging_time_mean: 过拟合 = 0.5894, 模型 = Polynomial
+   cluster_count -> energy_gini: 过拟合 = 0.3643, 模型 = Polynomial
+   cluster_count -> vehicle_gini: 过拟合 = 0.4686, 模型 = Polynomial
+   cluster_count -> charging_station_coverage: 过拟合 = 0.5523, 模型 = Polynomial
+   cluster_count -> ev_charging_participation_rate: 过拟合 = 0.4061, 模型 = Polynomial
+   coverage_ratio -> charging_time_mean: 过拟合 = 0.5591, 模型 = Polynomial
+   coverage_ratio -> energy_gini: 过拟合 = 0.4428, 模型 = Polynomial
+   coverage_ratio -> vehicle_gini: 过拟合 = 0.4243, 模型 = Polynomial
+   coverage_ratio -> charging_station_coverage: 过拟合 = 0.5186, 模型 = Polynomial
+   coverage_ratio -> ev_charging_participation_rate: 过拟合 = 0.4223, 模型 = Polynomial
+   max_gap_distance -> charging_time_mean: 过拟合 = 0.5142, 模型 = Polynomial
+   max_gap_distance -> energy_gini: 过拟合 = 0.3636, 模型 = Polynomial
+   max_gap_distance -> vehicle_gini: 过拟合 = 0.4117, 模型 = Polynomial
+   max_gap_distance -> charging_station_coverage: 过拟合 = 0.4836, 模型 = Polynomial
+   max_gap_distance -> ev_charging_participation_rate: 过拟合 = 0.4335, 模型 = Polynomial
+   gini_coefficient -> charging_time_mean: 过拟合 = 0.3280, 模型 = Polynomial
+   gini_coefficient -> vehicle_gini: 过拟合 = 0.3421, 模型 = Polynomial
+
+📊 建议:
+   📊 发现 0 个中等质量关系
+   💡 建议考虑数据插值以改善模型泛化能力

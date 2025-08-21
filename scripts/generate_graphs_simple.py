@@ -18,6 +18,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # 设置matplotlib参数
+import matplotlib
+matplotlib.use('Agg')  # 使用非交互式后端
+plt.rcParams['font.family'] = ['DejaVu Sans']  # 使用系统默认字体
+plt.rcParams['axes.unicode_minus'] = False
 plt.rcParams['figure.dpi'] = 300
 plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['font.size'] = 12
@@ -44,8 +48,8 @@ def get_feature_performance_columns(df):
     # 布局特征变量（移除已删除的列）
     feature_columns = [
         'avg_dist_to_center',
-        'std_nearest_neighbor',
-        'min_distance',
+        'std_pairwise_distance',
+        'min_pairwise_distance',
         'max_pairwise_distance',
         'cs_density_std',
         'cluster_count',
@@ -97,6 +101,57 @@ def get_feature_performance_columns(df):
     print(f"🎯 将生成图表数量: {len(available_features) * len(available_performance)} 张")
     
     return available_features, available_performance
+
+def get_column_display_info():
+    """获取列的显示名称和单位信息"""
+    
+    # 特征变量的显示名称和单位
+    feature_display = {
+        'avg_dist_to_center': ('Average Distance to Center', 'meters'),
+        'std_pairwise_distance': ('Std of Pairwise Distance', 'meters'),
+        'min_pairwise_distance': ('Minimum Pairwise Distance', 'meters'),
+        'max_pairwise_distance': ('Maximum Pairwise Distance', 'meters'),
+        'cs_density_std': ('Charging Station Density Std', 'stations/km²'),
+        'cluster_count': ('Cluster Count', 'clusters'),
+        'coverage_ratio': ('Coverage Ratio', 'ratio'),
+        'max_gap_distance': ('Maximum Gap Distance', 'meters'),
+        'gini_coefficient': ('Gini Coefficient', 'coefficient'),
+        'avg_betweenness_centrality': ('Average Betweenness Centrality', 'centrality')
+    }
+    
+    # 性能指标的显示名称和单位
+    performance_display = {
+        'duration_mean': ('Mean Trip Duration', 'seconds'),
+        'duration_median': ('Median Trip Duration', 'seconds'),
+        'duration_p90': ('90th Percentile Trip Duration', 'seconds'),
+        'charging_time_mean': ('Mean Charging Time', 'seconds'),
+        'charging_time_median': ('Median Charging Time', 'seconds'),
+        'charging_time_p90': ('90th Percentile Charging Time', 'seconds'),
+        'waiting_time_mean': ('Mean Waiting Time', 'seconds'),
+        'waiting_time_median': ('Median Waiting Time', 'seconds'),
+        'waiting_time_p90': ('90th Percentile Waiting Time', 'seconds'),
+        'energy_gini': ('Energy Distribution Gini', 'coefficient'),
+        'energy_cv': ('Energy Coefficient of Variation', 'coefficient'),
+        'energy_hhi': ('Energy Herfindahl-Hirschman Index', 'index'),
+        'energy_p90_p50_ratio': ('Energy P90/P50 Ratio', 'ratio'),
+        'vehicle_gini': ('Vehicle Distribution Gini', 'coefficient'),
+        'vehicle_cv': ('Vehicle Coefficient of Variation', 'coefficient'),
+        'vehicle_hhi': ('Vehicle Herfindahl-Hirschman Index', 'index'),
+        'charging_station_coverage': ('Charging Station Coverage', 'ratio'),
+        'reroute_count': ('Reroute Count', 'count'),
+        'ev_charging_participation_rate': ('EV Charging Participation Rate', 'rate'),
+        'ev_charging_failures': ('EV Charging Failures', 'count')
+    }
+    
+    return feature_display, performance_display
+
+def format_axis_label(column_name, display_info):
+    """格式化轴标签，包含单位"""
+    if column_name in display_info:
+        display_name, unit = display_info[column_name]
+        return f"{display_name} ({unit})"
+    else:
+        return column_name
 
 def fit_simple_models(x, y):
     """训练Linear和Polynomial回归模型并返回最佳模型的结果"""
@@ -187,6 +242,9 @@ def fit_simple_models(x, y):
 def create_scatter_plot(df, x_col, y_col, output_dir):
     """创建单个散点图"""
     try:
+        # 获取显示信息
+        feature_display, performance_display = get_column_display_info()
+        
         # 创建图形
         fig, ax = plt.subplots(figsize=(10, 8))
         
@@ -212,12 +270,12 @@ def create_scatter_plot(df, x_col, y_col, output_dir):
             ax.plot(x_fit, y_fit, color=color, linewidth=2.5,
                    label=f'{best_model} (R² = {r2:.3f})')
             
-            # 添加模型比较信息
+            # 添加模型比较信息（修复乱码）
             if len(model_results) > 1:
                 best_result = model_results[best_model]
-                info_text = f"最佳模型: {best_model}\n"
+                info_text = f"Best Model: {best_model}\n"
                 info_text += f"R²: {r2:.3f}\n"
-                info_text += f"相关系数: {best_result['correlation']:.3f}\n"
+                info_text += f"Correlation: {best_result['correlation']:.3f}\n"
                 
                 # 显示两个模型的R²比较
                 for name, result in model_results.items():
@@ -229,10 +287,18 @@ def create_scatter_plot(df, x_col, y_col, output_dir):
                        fontsize=9, verticalalignment='top', 
                        bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
         
+        # 格式化轴标签（包含单位）
+        x_label = format_axis_label(x_col, feature_display)
+        y_label = format_axis_label(y_col, performance_display)
+        
         # 设置标签和标题
-        ax.set_xlabel(x_col, fontsize=12, fontweight='bold')
-        ax.set_ylabel(y_col, fontsize=12, fontweight='bold')
-        ax.set_title(f'{x_col} vs {y_col}', fontsize=14, fontweight='bold', pad=20)
+        ax.set_xlabel(x_label, fontsize=12, fontweight='bold')
+        ax.set_ylabel(y_label, fontsize=12, fontweight='bold')
+        
+        # 创建更简洁的标题
+        x_display = feature_display.get(x_col, (x_col, ''))[0]
+        y_display = performance_display.get(y_col, (y_col, ''))[0]
+        ax.set_title(f'{x_display} vs {y_display}', fontsize=14, fontweight='bold', pad=20)
         
         # 添加网格
         ax.grid(True, alpha=0.3, linestyle='-', linewidth=0.5)
@@ -278,6 +344,9 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
     # 创建PDF合集
     pdf_path = os.path.join(output_dir, "simple_scatter_plots.pdf")
     
+    # 获取显示信息
+    feature_display, performance_display = get_column_display_info()
+    
     with PdfPages(pdf_path) as pdf:
         for i, x_col in enumerate(feature_cols, 1):
             print(f"\n📊 处理特征变量 [{i}/{len(feature_cols)}]: {x_col}")
@@ -311,11 +380,11 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
                         ax.plot(x_fit, y_fit, color=color, linewidth=2.5,
                                label=f'{best_model} (R² = {r2:.3f})')
                         
-                        # 添加模型比较信息
+                        # 添加模型比较信息（修复乱码）
                         if len(model_results) > 1:
                             best_result = model_results[best_model]
-                            info_text = f"最佳: {best_model} (R² = {r2:.3f})\n"
-                            info_text += f"相关系数: {best_result['correlation']:.3f}\n"
+                            info_text = f"Best: {best_model} (R² = {r2:.3f})\n"
+                            info_text += f"Correlation: {best_result['correlation']:.3f}\n"
                             
                             # 显示两个模型的R²比较
                             for name, result in model_results.items():
@@ -327,10 +396,18 @@ def generate_all_plots(df, feature_cols, performance_cols, output_dir):
                                    fontsize=9, verticalalignment='top', 
                                    bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
                     
+                    # 格式化轴标签（包含单位）
+                    x_label = format_axis_label(x_col, feature_display)
+                    y_label = format_axis_label(y_col, performance_display)
+                    
                     # 设置标签和标题
-                    ax.set_xlabel(x_col, fontsize=12, fontweight='bold')
-                    ax.set_ylabel(y_col, fontsize=12, fontweight='bold')
-                    ax.set_title(f'{x_col} vs {y_col}', fontsize=14, fontweight='bold', pad=20)
+                    ax.set_xlabel(x_label, fontsize=12, fontweight='bold')
+                    ax.set_ylabel(y_label, fontsize=12, fontweight='bold')
+                    
+                    # 创建更简洁的标题
+                    x_display = feature_display.get(x_col, (x_col, ''))[0]
+                    y_display = performance_display.get(y_col, (y_col, ''))[0]
+                    ax.set_title(f'{x_display} vs {y_display}', fontsize=14, fontweight='bold', pad=20)
                     
                     # 添加网格
                     ax.grid(True, alpha=0.3, linestyle='-', linewidth=0.5)
@@ -420,7 +497,7 @@ def main():
     print("🚀 开始生成充电桩布局特征与性能指标散点图（简化版本）")
     
     # 设置路径
-    data_file = "/home/ubuntu/project/MSC/Msc_Project/models/input/merged_dataset.csv"
+    data_file = "/home/ubuntu/project/MSC/Msc_Project/models/input_1-100/merged_dataset.csv"
     output_dir = "/home/ubuntu/project/MSC/Msc_Project/models/plots_simple"
     
     print(f"📊 数据文件: {data_file}")

@@ -173,9 +173,9 @@ def calculate_features_from_coords(cs_coords, net_xml_path):
     features = {
         "cs_count": cs_count,
         "avg_dist_to_center": avg_dist_to_center,
-        "avg_nearest_neighbor": avg_nn,
-        "std_nearest_neighbor": std_nn,
-        "min_distance": min_nn,
+        "avg_pairwise_distance": avg_nn,
+        "std_pairwise_distance": std_nn,
+        "min_pairwise_distance": min_nn,
         "max_pairwise_distance": max_pairwise_distance,
         "cs_density_std": cs_density_std,
         # 新增特征

@@ -617,3 +617,27 @@ python scripts/run_global_simulation.py --matrix data/scenario_matrix_batch2.csv
 4. **可重现**：固定随机种子，结果可重现
 
 这样整个流程就非常清晰了！你可以根据需要选择快速开始或分步执行。
+
+生成充电桩的热力图：
+cd /home/ubuntu/project/MSC/Msc_Project && source venv/bin/activate && python visualize_charging_stations_v2.py
+
+
+生成拟合图像（linear和polynomial）：
+python scripts/gnerate_graphs_simple.py
+
+检验是否过拟合：
+1. python scripts/simple_regression_analysis_v2.py(linear和polynomial)
+
+2. 
+
+
+比较不同模型的详细表现：
+python scripts/model_comparison_analysis.py
+解释过拟合：
+python scripts/explain_model_choice_rationale.py
+
+!!最终解释为什么选用二项式：
+python scripts/trend_vs_prediction_analysis.py
+
+
+展示图像终点（分段展示）

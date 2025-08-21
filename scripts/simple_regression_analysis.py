@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.model_selection import cross_val_score, LeaveOneOut
@@ -46,10 +46,18 @@ def analyze_relationship(x, y, feature_name, target_name):
     train_r2_linear = r2_score(y_clean, y_pred_linear)
     
     # 留一交叉验证
-    cv_scores_linear = cross_val_score(linear_model, X, y_clean, 
-                                      cv=LeaveOneOut(), scoring='r2')
-    cv_r2_linear = cv_scores_linear.mean()
-    cv_std_linear = cv_scores_linear.std()
+    try:
+        cv_scores_linear = cross_val_score(linear_model, X, y_clean, 
+                                          cv=LeaveOneOut(), scoring='r2')
+        # 清理无效分数
+        cv_scores_linear = cv_scores_linear[~np.isnan(cv_scores_linear) & ~np.isinf(cv_scores_linear)]
+        cv_r2_linear = cv_scores_linear.mean() if len(cv_scores_linear) > 0 else 0.0
+        cv_std_linear = cv_scores_linear.std() if len(cv_scores_linear) > 0 else 0.0
+    except Exception as e:
+        print(f"     交叉验证失败: {e}")
+        cv_scores_linear = np.array([0.0])
+        cv_r2_linear = 0.0
+        cv_std_linear = 0.0
     
     # 过拟合程度
     overfitting_linear = train_r2_linear - cv_r2_linear
@@ -65,9 +73,16 @@ def analyze_relationship(x, y, feature_name, target_name):
     y_pred_ridge = ridge_model.predict(X)
     
     train_r2_ridge = r2_score(y_clean, y_pred_ridge)
-    cv_scores_ridge = cross_val_score(ridge_model, X, y_clean, 
-                                     cv=LeaveOneOut(), scoring='r2')
-    cv_r2_ridge = cv_scores_ridge.mean()
+    try:
+        cv_scores_ridge = cross_val_score(ridge_model, X, y_clean, 
+                                         cv=LeaveOneOut(), scoring='r2')
+        # 清理无效分数
+        cv_scores_ridge = cv_scores_ridge[~np.isnan(cv_scores_ridge) & ~np.isinf(cv_scores_ridge)]
+        cv_r2_ridge = cv_scores_ridge.mean() if len(cv_scores_ridge) > 0 else 0.0
+    except Exception as e:
+        print(f"     Ridge交叉验证失败: {e}")
+        cv_scores_ridge = np.array([0.0])
+        cv_r2_ridge = 0.0
     overfitting_ridge = train_r2_ridge - cv_r2_ridge
     
     print(f"   Ridge回归 (α=1.0):")
@@ -164,8 +179,15 @@ def create_diagnostic_plot(df, x_col, y_col, output_dir):
     
     # 计算统计信息
     train_r2 = r2_score(y_clean, model.predict(X))
-    cv_scores = cross_val_score(model, X, y_clean, cv=LeaveOneOut(), scoring='r2')
-    cv_r2 = cv_scores.mean()
+    try:
+        cv_scores = cross_val_score(model, X, y_clean, cv=LeaveOneOut(), scoring='r2')
+        # 清理无效分数
+        cv_scores = cv_scores[~np.isnan(cv_scores) & ~np.isinf(cv_scores)]
+        cv_r2 = cv_scores.mean() if len(cv_scores) > 0 else 0.0
+    except Exception as e:
+        print(f"     诊断图交叉验证失败: {e}")
+        cv_scores = np.array([0.0])
+        cv_r2 = 0.0
     pearson_r, _ = stats.pearsonr(x_clean, y_clean)
     
     ax1.set_title(f'{x_col} vs {y_col}')
@@ -194,12 +216,27 @@ def create_diagnostic_plot(df, x_col, y_col, output_dir):
     ax3.grid(True, alpha=0.3)
     
     # 4. 交叉验证分数分布
-    ax4.hist(cv_scores, bins=10, alpha=0.7, color='orange', edgecolor='black')
-    ax4.axvline(cv_r2, color='red', linestyle='--', linewidth=2, label=f'平均: {cv_r2:.3f}')
-    ax4.set_title('交叉验证R²分布')
-    ax4.set_xlabel('R²')
-    ax4.set_ylabel('频次')
-    ax4.legend()
+    # 检查并清理cv_scores数据
+    cv_scores_clean = cv_scores[~np.isnan(cv_scores) & ~np.isinf(cv_scores)]
+    
+    if len(cv_scores_clean) > 0 and np.std(cv_scores_clean) > 1e-10:
+        # 动态确定bins数量
+        n_bins = min(10, max(3, len(cv_scores_clean) // 2))
+        ax4.hist(cv_scores_clean, bins=n_bins, alpha=0.7, color='orange', edgecolor='black')
+        ax4.axvline(cv_r2, color='red', linestyle='--', linewidth=2, label=f'平均: {cv_r2:.3f}')
+        ax4.set_title('交叉验证R²分布')
+        ax4.set_xlabel('R²')
+        ax4.set_ylabel('频次')
+        ax4.legend()
+    else:
+        # 如果数据无效，显示文本说明
+        ax4.text(0.5, 0.5, f'交叉验证数据:\n平均R²: {cv_r2:.3f}\n样本数: {len(cv_scores)}', 
+                ha='center', va='center', transform=ax4.transAxes,
+                bbox=dict(boxstyle='round', facecolor='lightgray', alpha=0.8))
+        ax4.set_title('交叉验证R²信息')
+        ax4.set_xlim(0, 1)
+        ax4.set_ylim(0, 1)
+    
     ax4.grid(True, alpha=0.3)
     
     plt.tight_layout()
@@ -216,7 +253,7 @@ def main():
     print("🔍 开始简单回归分析 - 防过拟合版本")
     
     # 设置路径
-    data_file = "/home/ubuntu/project/MSC/Msc_Project/models/input/merged_dataset.csv"
+    data_file = "/home/ubuntu/project/MSC/Msc_Project/models/input_1-100/merged_dataset.csv"
     output_dir = "/home/ubuntu/project/MSC/Msc_Project/models/analysis_simple"
     
     # 创建输出目录
