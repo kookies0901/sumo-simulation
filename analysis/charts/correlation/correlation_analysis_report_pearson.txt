@@ -1,0 +1,37 @@
+动态性能指标PEARSON相关性分析报告
+============================================================
+
+分析时间: 2025-08-24 05:08:49
+分析方法: Pearson Correlation
+样本数量: 81
+指标数量: 20
+
+指标列表:
+    1. duration_mean
+    2. duration_median
+    3. duration_p90
+    4. charging_time_mean
+    5. charging_time_median
+    6. charging_time_p90
+    7. waiting_time_mean
+    8. waiting_time_median
+    9. waiting_time_p90
+   10. energy_gini
+   11. energy_cv
+   12. energy_hhi
+   13. energy_p90_p50_ratio
+   14. vehicle_gini
+   15. vehicle_cv
+   16. vehicle_hhi
+   17. charging_station_coverage
+   18. reroute_count
+   19. ev_charging_participation_rate
+   20. ev_charging_failures
+
+相关性矩阵摘要:
+   最大正相关: 0.926
+   最大负相关: -0.941
+   平均绝对相关性: 0.522
+   强相关对数 (|r|≥0.7): 53
+   中等相关对数 (0.3≤|r|<0.7): 99
+   弱相关对数 (|r|<0.3): 38

@@ -641,3 +641,62 @@ python scripts/trend_vs_prediction_analysis.py
 
 
 展示图像终点（分段展示）
+
+
+python scripts/png_to_pdf_converter.py data/cs_1-100_glasgow --batch-size 3 --max-width 1500 --max-height 1500
+
+
+python analysis/scripts/image_combiner.py --help
+usage: image_combiner.py [-h] -o OUTPUT [-c {1,2,3}] [-t TITLE] [-s SPACING] [-m MARGIN]
+                         [-f {png,pdf}] [--matplotlib] [--dpi DPI]
+                         inputs [inputs ...]
+
+专业图片拼接工具 - 支持多种布局和输出格式
+
+positional arguments:
+  inputs                输入图片或文件夹路径（支持多个）
+
+options:
+  -h, --help            show this help message and exit
+  -o OUTPUT, --output OUTPUT
+                        输出文件路径（.png或.pdf）
+  -c {1,2,3}, --columns {1,2,3}
+                        列数布局（1-3列，默认自动判断）
+  -t TITLE, --title TITLE
+                        图表标题
+  -s SPACING, --spacing SPACING
+                        图片间距（像素，默认20）
+  -m MARGIN, --margin MARGIN
+                        边距（像素，默认40）
+  -f {png,pdf}, --format {png,pdf}
+                        输出格式（默认根据文件扩展名判断）
+  --matplotlib          使用matplotlib生成学术级图表
+  --dpi DPI             输出分辨率（DPI，默认300）
+
+使用示例:
+  
+  # 将文件夹内所有PNG拼接为PDF（自动布局）
+  python image_combiner.py /path/to/images/ -o combined.pdf
+  
+  # 指定多个单独图片，双列布局，添加字母编号
+  python image_combiner.py img1.png img2.png img3.png img4.png -o result.png -c 2 --labels
+  
+  # 混合输入：文件夹+单个文件，三列布局，添加标题和编号
+  python image_combiner.py /folder1/ /folder2/ single.png -o output.pdf -c 3 -t "研究结果对比" --labels
+  
+  python scripts/image_combiner.py /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_004_scatter_with_map.png /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_051_scatter_with_map.png /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_063_scatter_with_map.png    python scripts/image_combiner.py /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_075_scatter_with_map.png /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_085_scatter_with_map.png /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_093_scatter_with_map.png  -o charts/Comparison_Chart_of_Typical_Layout_Patterns.pdf -c 3 --labels
+
+
+
+  # 典型布局模式对比图
+  python scripts/image_combiner.py /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_004_scatter_with_map.png /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_051_scatter_with_map.png /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_063_scatter_with_map.png  /home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/cs_group_093_scatter_with_map.png  \
+  -o "final_version/Comparison_of_typical_layout_patterns.png" \
+  -c 2 --labels  \
+  --label-position bottom
+
+  # 使用matplotlib生成学术级图表（带编号）
+  python image_combiner.py images/ -o academic.pdf --matplotlib -t "Experimental Results" --labels
+  
+  # 无标题、无编号的简洁拼接
+  python image_combiner.py *.png -o simple.png -c 2
+

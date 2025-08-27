@@ -1,0 +1,21 @@
+Metric,Category,Definition,Unit,Data_Source
+duration_mean,车辆行程时间指标,所有车辆从出发到到达目的地的平均行驶时间,秒(s),tripinfo_output.xml中的duration属性
+duration_median,车辆行程时间指标,所有车辆行驶时间的中位数（50%分位数）,秒(s),tripinfo_output.xml中的duration属性
+duration_p90,车辆行程时间指标,90%的车辆行驶时间低于此值,秒(s),tripinfo_output.xml中的duration属性
+charging_time_mean,充电时间指标,所有充电事件的平均持续时间,秒(s),chargingevents.xml中的chargingSteps属性
+charging_time_median,充电时间指标,所有充电事件时间的中位数,秒(s),chargingevents.xml中的chargingSteps属性
+charging_time_p90,充电时间指标,90%的充电事件时间低于此值,秒(s),chargingevents.xml中的chargingSteps属性
+waiting_time_mean,车辆等待时间指标,所有车辆的平均等待时间（包括交通信号、拥堵等待）,秒(s),tripinfo_output.xml中的waitingTime属性
+waiting_time_median,车辆等待时间指标,所有车辆等待时间的中位数,秒(s),tripinfo_output.xml中的waitingTime属性
+waiting_time_p90,车辆等待时间指标,90%的车辆等待时间低于此值,秒(s),tripinfo_output.xml中的waitingTime属性
+energy_gini,能源分配公平性指标,衡量充电桩间充电量分布的不均匀程度,"无量纲 [0,1]",chargingevents.xml中的totalEnergyCharged属性
+energy_cv,能源分配公平性指标,充电桩充电量的标准差与均值的比值,无量纲,chargingevents.xml中的totalEnergyCharged属性
+energy_hhi,能源分配公平性指标,赫芬达尔-赫希曼指数，衡量充电量集中程度,"无量纲 [0,1]",chargingevents.xml中的totalEnergyCharged属性
+energy_p90_p50_ratio,能源分配公平性指标,90分位数充电量与50分位数充电量的比值,无量纲,chargingevents.xml中的totalEnergyCharged属性
+vehicle_gini,车辆分配公平性指标,衡量充电桩间服务车辆数分布的不均匀程度,"无量纲 [0,1]",chargingevents.xml中每个充电桩的vehicle元素数量
+vehicle_cv,车辆分配公平性指标,充电桩服务车辆数的标准差与均值比值,无量纲,chargingevents.xml中每个充电桩的vehicle元素数量
+vehicle_hhi,车辆分配公平性指标,充电桩服务车辆数的集中度指数,"无量纲 [0,1]",chargingevents.xml中每个充电桩的vehicle元素数量
+charging_station_coverage,基础设施利用率指标,有实际充电活动的充电桩占总充电桩数量的比例,"无量纲 [0,1]",chargingevents.xml中totalEnergyCharged > 0的充电桩
+reroute_count,交通系统稳定性指标,在行程中发生重新路由的车辆总数,车辆数,tripinfo_output.xml中的rerouteNo属性
+ev_charging_participation_rate,充电服务覆盖指标,实际参与充电的EV数量占总EV数量的比例,"无量纲 [0,1]",chargingevents.xml中ID以'EV_'开头的vehicle元素
+ev_charging_failures,充电服务质量指标,未能成功完成充电的EV数量,车辆数,tripinfo_output.xml中的stationfinder子元素

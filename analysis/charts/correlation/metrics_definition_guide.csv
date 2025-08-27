@@ -1,0 +1,21 @@
+﻿指标名称,中文名称,分类,定义,计算公式,数据来源,单位,解释,影响因素
+duration_mean,平均行驶时间,车辆行程时间指标,所有车辆从出发到到达目的地的平均行驶时间,mean(车辆i的duration) for i in 所有车辆,tripinfo_output.xml中的duration属性,秒(s),反映整体交通流效率，值越小表示交通越顺畅,充电站布局、交通拥堵、路网结构
+duration_median,行驶时间中位数,车辆行程时间指标,所有车辆行驶时间的中位数（50%分位数）,median(车辆i的duration) for i in 所有车辆,tripinfo_output.xml中的duration属性,秒(s),更稳健的中心趋势指标，不受极值影响,网络拥堵分布、充电站可达性
+duration_p90,行驶时间90分位数,车辆行程时间指标,90%的车辆行驶时间低于此值,"percentile(车辆i的duration, 90) for i in 所有车辆",tripinfo_output.xml中的duration属性,秒(s),反映最不利情况下的行程时间，衡量系统可靠性,极端拥堵、充电等待、路网瓶颈
+charging_time_mean,平均充电时间,充电时间指标,所有充电事件的平均持续时间,mean(充电桩j的chargingSteps) for j in 所有有充电活动的充电桩,chargingevents.xml中的chargingSteps属性,秒(s),反映平均充电服务时间，值越小表示充电效率越高,充电桩功率、电池容量、充电策略
+charging_time_median,充电时间中位数,充电时间指标,所有充电事件时间的中位数,median(充电桩j的chargingSteps) for j in 所有有充电活动的充电桩,chargingevents.xml中的chargingSteps属性,秒(s),更稳健的充电时间中心趋势,充电需求分布、充电桩配置
+charging_time_p90,充电时间90分位数,充电时间指标,90%的充电事件时间低于此值,"percentile(充电桩j的chargingSteps, 90) for j in 所有有充电活动的充电桩",chargingevents.xml中的chargingSteps属性,秒(s),反映极端情况下的充电时间，衡量充电系统压力,高峰期排队、充电桩故障、特殊充电需求
+waiting_time_mean,平均等待时间,车辆等待时间指标,所有车辆的平均等待时间（包括交通信号、拥堵等待）,mean(车辆i的waitingTime) for i in 所有车辆,tripinfo_output.xml中的waitingTime属性,秒(s),反映交通拥堵程度，值越大表示拥堵越严重,交通流量、信号控制、路网容量、充电站排队
+waiting_time_median,等待时间中位数,车辆等待时间指标,所有车辆等待时间的中位数,median(车辆i的waitingTime) for i in 所有车辆,tripinfo_output.xml中的waitingTime属性,秒(s),更稳健的等待时间指标，减少极值影响,常规拥堵水平、交通组织
+waiting_time_p90,等待时间90分位数,车辆等待时间指标,90%的车辆等待时间低于此值,"percentile(车辆i的waitingTime, 90) for i in 所有车辆",tripinfo_output.xml中的waitingTime属性,秒(s),反映最坏情况下的等待时间，衡量系统鲁棒性,严重拥堵、交通事故、充电站排队
+energy_gini,充电量基尼系数,能源分配公平性指标,衡量充电桩间充电量分布的不均匀程度,Gini(充电桩j的totalEnergyCharged) = (2Σ(i×x_i))/(n×Σx_i) - (n+1)/n,chargingevents.xml中的totalEnergyCharged属性,"无量纲 [0,1]",0表示完全均匀，1表示完全不均匀。值越大表示充电量分布越不平衡,充电站布局、EV出行模式、充电站容量
+energy_cv,充电量变异系数,能源分配公平性指标,充电桩充电量的标准差与均值的比值,CV = std(totalEnergyCharged) / mean(totalEnergyCharged),chargingevents.xml中的totalEnergyCharged属性,无量纲,衡量充电量的相对变异程度，值越大表示分布越分散,充电需求分布、充电站设计、空间可达性
+energy_hhi,充电量HHI指数,能源分配公平性指标,赫芬达尔-赫希曼指数，衡量充电量集中程度,"HHI = Σ(s_i^2), 其中s_i是充电桩i的充电量份额",chargingevents.xml中的totalEnergyCharged属性,"无量纲 [0,1]",值越大表示充电量越集中在少数充电桩上，反映市场集中度,充电站布局优化程度、EV路径选择
+energy_p90_p50_ratio,充电量90/50分位数比值,能源分配公平性指标,90分位数充电量与50分位数充电量的比值,P90(totalEnergyCharged) / P50(totalEnergyCharged),chargingevents.xml中的totalEnergyCharged属性,无量纲,衡量高负荷充电桩与中等负荷充电桩的差异倍数,充电站利用率分化、位置优势差异
+vehicle_gini,充电车辆数基尼系数,车辆分配公平性指标,衡量充电桩间服务车辆数分布的不均匀程度,Gini(充电桩j服务的车辆数),chargingevents.xml中每个充电桩的vehicle元素数量,"无量纲 [0,1]",反映充电桩服务负荷的公平性，值越大表示负荷分布越不均,充电站容量配置、地理分布、交通流分布
+vehicle_cv,充电车辆数变异系数,车辆分配公平性指标,充电桩服务车辆数的标准差与均值比值,CV = std(车辆数) / mean(车辆数),chargingevents.xml中每个充电桩的vehicle元素数量,无量纲,衡量充电桩服务量的相对离散程度,充电站规模差异、位置吸引力
+vehicle_hhi,充电车辆数HHI指数,车辆分配公平性指标,充电桩服务车辆数的集中度指数,"HHI = Σ(s_i^2), 其中s_i是充电桩i的服务车辆份额",chargingevents.xml中每个充电桩的vehicle元素数量,"无量纲 [0,1]",值越大表示服务越集中在少数充电桩，反映负荷集中程度,充电站布局合理性、网络效应
+charging_station_coverage,充电桩使用覆盖率,基础设施利用率指标,有实际充电活动的充电桩占总充电桩数量的比例,使用过的充电桩数量 / 总充电桩数量,chargingevents.xml中totalEnergyCharged > 0的充电桩,"无量纲 [0,1]",反映充电基础设施的利用程度，值越高表示利用率越好,充电站布局合理性、充电需求分布、可达性
+reroute_count,重新路由车辆数,交通系统稳定性指标,在行程中发生重新路由的车辆总数,count(车辆i的rerouteNo > 0) for i in 所有车辆,tripinfo_output.xml中的rerouteNo属性,车辆数,反映交通系统的不稳定性，值越大表示交通扰动越多,交通拥堵、充电站排队、路网瓶颈、动态交通管理
+ev_charging_participation_rate,EV充电参与率,充电服务覆盖指标,实际参与充电的EV数量占总EV数量的比例,实际充电的EV数量 / 总EV数量(1800),chargingevents.xml中ID以'EV_'开头的vehicle元素,"无量纲 [0,1]",反映充电服务的覆盖程度，值越高表示更多EV能获得充电服务,充电站密度、充电桩容量、EV行程特征、充电策略
+ev_charging_failures,EV充电失败数,充电服务质量指标,未能成功完成充电的EV数量,count(stationfinder元素) in tripinfo_output.xml,tripinfo_output.xml中的stationfinder子元素,车辆数,反映充电系统的服务失败情况，值越大表示充电服务质量越差,充电站容量不足、位置不合理、充电桩故障、排队等待超时

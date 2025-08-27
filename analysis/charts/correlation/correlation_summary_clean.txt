@@ -1,0 +1,91 @@
+Dynamic Performance Metrics Correlation Analysis Summary
+============================================================
+
+Analysis Date: 2025-08-24 05:17:14
+Sample Size: 81 layout configurations
+Metrics Analyzed: 20 dynamic performance indicators
+Total Correlation Pairs: 190
+
+Top 20 Strongest Correlations:
+----------------------------------------
+ 1. vehicle_hhi ↔ charging_station_coverage
+    Correlation: -0.941 (Negative)
+
+ 2. charging_time_p90 ↔ charging_station_coverage
+    Correlation: -0.931 (Negative)
+
+ 3. charging_time_p90 ↔ vehicle_hhi
+    Correlation: 0.926 (Positive)
+
+ 4. vehicle_hhi ↔ ev_charging_participation_rate
+    Correlation: -0.921 (Negative)
+
+ 5. energy_hhi ↔ ev_charging_participation_rate
+    Correlation: -0.914 (Negative)
+
+ 6. charging_time_mean ↔ charging_time_p90
+    Correlation: 0.913 (Positive)
+
+ 7. energy_hhi ↔ charging_station_coverage
+    Correlation: -0.909 (Negative)
+
+ 8. charging_time_p90 ↔ energy_hhi
+    Correlation: 0.903 (Positive)
+
+ 9. charging_time_mean ↔ charging_station_coverage
+    Correlation: -0.899 (Negative)
+
+10. charging_station_coverage ↔ ev_charging_participation_rate
+    Correlation: 0.897 (Positive)
+
+11. energy_hhi ↔ vehicle_hhi
+    Correlation: 0.894 (Positive)
+
+12. charging_time_mean ↔ vehicle_hhi
+    Correlation: 0.889 (Positive)
+
+13. vehicle_gini ↔ vehicle_cv
+    Correlation: 0.875 (Positive)
+
+14. charging_time_mean ↔ energy_hhi
+    Correlation: 0.862 (Positive)
+
+15. vehicle_hhi ↔ ev_charging_failures
+    Correlation: 0.857 (Positive)
+
+16. charging_time_p90 ↔ ev_charging_participation_rate
+    Correlation: -0.852 (Negative)
+
+17. vehicle_gini ↔ vehicle_hhi
+    Correlation: 0.847 (Positive)
+
+18. charging_time_median ↔ vehicle_hhi
+    Correlation: 0.846 (Positive)
+
+19. charging_station_coverage ↔ ev_charging_failures
+    Correlation: -0.840 (Negative)
+
+20. charging_time_mean ↔ ev_charging_participation_rate
+    Correlation: -0.838 (Negative)
+
+Correlation Strength Distribution:
+----------------------------------------
+Very Strong (|r| ≥ 0.8): 23 pairs (12.1%)
+Strong (0.6 ≤ |r| < 0.8): 64 pairs (33.7%)
+Moderate (0.3 ≤ |r| < 0.6): 65 pairs (34.2%)
+Weak (|r| < 0.3): 38 pairs (20.0%)
+
+Key Findings:
+----------------------------------------
+1. Charging Infrastructure Impact:
+   - charging_station_coverage shows strong negative correlations
+   - Higher coverage leads to better system performance
+
+2. Resource Distribution Effects:
+   - HHI indices (concentration measures) highly correlated
+   - Uneven distribution leads to performance degradation
+
+3. Time Performance Clustering:
+   - Duration, waiting, and charging times are interconnected
+   - Shows system-wide performance coordination
+

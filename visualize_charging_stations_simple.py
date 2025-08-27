@@ -11,6 +11,7 @@ import pandas as pd
 from collections import defaultdict
 import os
 import warnings
+from PIL import Image
 warnings.filterwarnings('ignore')
 
 # 设置字体和图形参数
@@ -22,14 +23,42 @@ plt.rcParams['figure.dpi'] = 300
 plt.rcParams['savefig.dpi'] = 300
 
 class SimpleChargingStationVisualizer:
-    def __init__(self, network_file, xml_dirs, output_dir):
+    def __init__(self, network_file, xml_dirs, output_dir, map_image_path=None):
         self.network_file = network_file
         self.xml_dirs = xml_dirs
         self.output_dir = output_dir
+        self.map_image_path = map_image_path
         self.lane_coordinates = {}
         self.charging_stations = {}
+        self.map_image = None
         
         os.makedirs(output_dir, exist_ok=True)
+        
+        # 加载地图图片
+        if map_image_path and os.path.exists(map_image_path):
+            self.load_map_image()
+    
+    def load_map_image(self):
+        """加载地图图片"""
+        try:
+            self.map_image = Image.open(self.map_image_path)
+            print(f"✅ 成功加载地图图片: {self.map_image_path}")
+            print(f"   图片尺寸: {self.map_image.size}")
+        except Exception as e:
+            print(f"⚠️ 加载地图图片失败: {e}")
+            self.map_image = None
+    
+    def add_map_background(self, ax, x_min, x_max, y_min, y_max):
+        """为坐标轴添加地图背景"""
+        if self.map_image is None:
+            return
+        
+        try:
+            extent = [x_min, x_max, y_min, y_max]
+            ax.imshow(self.map_image, extent=extent, aspect='auto', alpha=0.7, zorder=0)
+            print("✅ 已添加地图背景")
+        except Exception as e:
+            print(f"⚠️ 添加地图背景失败: {e}")
         
     def parse_network_lanes(self):
         """快速解析网络文件，只关注lane坐标"""
@@ -201,7 +230,10 @@ class SimpleChargingStationVisualizer:
             if not stations:
                 continue
             
-            plt.figure(figsize=(12, 10))
+            fig, ax = plt.subplots(figsize=(14, 12))
+            
+            # 添加地图背景
+            self.add_map_background(ax, x_min, x_max, y_min, y_max)
             
             # 分离真实和估算坐标
             real_stations = [s for s in stations if not s.get('estimated', False)]
@@ -210,32 +242,41 @@ class SimpleChargingStationVisualizer:
             if real_stations:
                 real_x = [s['x'] for s in real_stations]
                 real_y = [s['y'] for s in real_stations]
-                plt.scatter(real_x, real_y, c='red', s=40, alpha=0.8, 
-                           edgecolors='darkred', linewidth=0.8, label='Exact locations')
+                ax.scatter(real_x, real_y, c='red', s=80, alpha=0.9, 
+                           edgecolors='darkred', linewidth=1.5, label='Charging station location', zorder=5)
             
             if est_stations:
                 est_x = [s['x'] for s in est_stations]
                 est_y = [s['y'] for s in est_stations]
-                plt.scatter(est_x, est_y, c='blue', s=40, alpha=0.6, 
-                           edgecolors='darkblue', linewidth=0.8, label='Estimated locations')
+                ax.scatter(est_x, est_y, c='blue', s=80, alpha=0.8, 
+                           edgecolors='darkblue', linewidth=1.5, label='cs location', zorder=5)
             
+            # 添加图例
             if real_stations and est_stations:
-                plt.legend()
+                ax.legend(loc='upper right', fontsize=12, framealpha=0.9)
+            elif real_stations:
+                ax.legend(loc='upper right', fontsize=12, framealpha=0.9)
+            elif est_stations:
+                ax.legend(loc='upper right', fontsize=12, framealpha=0.9)
             
-            plt.title(f'{group_name} Charging Station Distribution\\n' + 
-                     f'({len(stations)} stations: {len(real_stations)} exact + {len(est_stations)} estimated)', 
-                     fontsize=16, fontweight='bold')
-            plt.xlabel('X Coordinate (meters)', fontsize=12)
-            plt.ylabel('Y Coordinate (meters)', fontsize=12)
-            plt.grid(True, alpha=0.3)
+            # 简化标题，只显示组名和总站点数
+            ax.set_title(f'{group_name} ({len(stations)} stations)', 
+                        fontsize=16, fontweight='bold', pad=20)
             
-            plt.xlim(x_min, x_max)
-            plt.ylim(y_min, y_max)
+            # 移除XY轴标签和刻度
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.set_xlabel('')
+            ax.set_ylabel('')
+            
+            ax.set_xlim(x_min, x_max)
+            ax.set_ylim(y_min, y_max)
             
             plt.tight_layout()
-            scatter_png = f'{self.output_dir}/{group_name}_scatter.png'
-            plt.savefig(scatter_png, dpi=300, bbox_inches='tight')
+            scatter_png = f'{self.output_dir}/{group_name}_scatter_with_map.png'
+            plt.savefig(scatter_png, dpi=300, bbox_inches='tight', facecolor='white')
             plt.close()
+            print(f"✅ 已生成带地图背景的散点图: {scatter_png}")
     
     def create_summary_plots(self):
         """创建总体概览图"""
@@ -260,6 +301,9 @@ class SimpleChargingStationVisualizer:
             ax = axes[idx]
             stations = self.charging_stations[group_name]
             
+            # 添加地图背景
+            self.add_map_background(ax, x_min, x_max, y_min, y_max)
+            
             if stations:
                 real_stations = [s for s in stations if not s.get('estimated', False)]
                 est_stations = [s for s in stations if s.get('estimated', False)]
@@ -267,29 +311,33 @@ class SimpleChargingStationVisualizer:
                 if real_stations:
                     real_x = [s['x'] for s in real_stations]
                     real_y = [s['y'] for s in real_stations]
-                    ax.scatter(real_x, real_y, c='red', s=30, alpha=0.7, 
-                              edgecolors='darkred', linewidth=0.5)
+                    ax.scatter(real_x, real_y, c='red', s=50, alpha=0.9, 
+                              edgecolors='darkred', linewidth=1, zorder=5)
                 
                 if est_stations:
                     est_x = [s['x'] for s in est_stations]
                     est_y = [s['y'] for s in est_stations]
-                    ax.scatter(est_x, est_y, c='blue', s=30, alpha=0.5, 
-                              edgecolors='darkblue', linewidth=0.5)
+                    ax.scatter(est_x, est_y, c='blue', s=50, alpha=0.8, 
+                              edgecolors='darkblue', linewidth=1, zorder=5)
             
             ax.set_title(f'{group_name}\\n({len(stations)} stations)', fontsize=12, fontweight='bold')
             ax.set_xlabel('X Coordinate (meters)', fontsize=10)
             ax.set_ylabel('Y Coordinate (meters)', fontsize=10)
-            ax.grid(True, alpha=0.3)
+            ax.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
             ax.set_xlim(x_min, x_max)
             ax.set_ylim(y_min, y_max)
         
-        plt.suptitle('Charging Station Distribution Comparison (First 6 Scenarios)', fontsize=16, fontweight='bold')
+        plt.suptitle('Charging Station Distribution Comparison on Glasgow Map (First 6 Scenarios)', fontsize=16, fontweight='bold')
         plt.tight_layout()
-        plt.savefig(f'{self.output_dir}/charging_stations_comparison.png', dpi=300, bbox_inches='tight')
+        plt.savefig(f'{self.output_dir}/charging_stations_comparison_with_map.png', dpi=300, bbox_inches='tight', facecolor='white')
         plt.close()
+        print("✅ 已生成带地图背景的对比图")
         
         # 2. 叠加频次图
-        plt.figure(figsize=(15, 12))
+        fig, ax = plt.subplots(figsize=(16, 14))
+        
+        # 添加地图背景
+        self.add_map_background(ax, x_min, x_max, y_min, y_max)
         
         all_coords = defaultdict(int)
         for stations in self.charging_stations.values():
@@ -302,19 +350,27 @@ class SimpleChargingStationVisualizer:
             y_coords = [coord[1] for coord in all_coords.keys()]
             frequencies = list(all_coords.values())
             
-            scatter = plt.scatter(x_coords, y_coords, c=frequencies, s=50, 
-                                alpha=0.7, cmap='YlOrRd', edgecolors='black', linewidth=0.5)
+            scatter = ax.scatter(x_coords, y_coords, c=frequencies, s=80, 
+                               alpha=0.8, cmap='YlOrRd', edgecolors='black', linewidth=0.8, zorder=5)
             
-            plt.colorbar(scatter, label='Station Selection Frequency')
-            plt.title('100 Scenarios Charging Station Overlay Map\\n(Color intensity shows selection frequency)', 
-                     fontsize=16, fontweight='bold')
-            plt.xlabel('X Coordinate (meters)', fontsize=12)
-            plt.ylabel('Y Coordinate (meters)', fontsize=12)
-            plt.grid(True, alpha=0.3)
+            cbar = plt.colorbar(scatter, ax=ax, shrink=0.8)
+            cbar.set_label('Station Selection Frequency', fontsize=14, fontweight='bold')
+            cbar.ax.tick_params(labelsize=12)
+            
+            ax.set_title('100 Scenarios Charging Station Overlay on Glasgow Map\\n(Color intensity shows selection frequency)', 
+                        fontsize=16, fontweight='bold', pad=20)
+            ax.set_xlabel('X Coordinate (meters)', fontsize=14, fontweight='bold')
+            ax.set_ylabel('Y Coordinate (meters)', fontsize=14, fontweight='bold')
+            ax.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
+            ax.tick_params(axis='both', which='major', labelsize=12)
+            
+            ax.set_xlim(x_min, x_max)
+            ax.set_ylim(y_min, y_max)
         
         plt.tight_layout()
-        plt.savefig(f'{self.output_dir}/charging_stations_overlay.png', dpi=300, bbox_inches='tight')
+        plt.savefig(f'{self.output_dir}/charging_stations_overlay_with_map.png', dpi=300, bbox_inches='tight', facecolor='white')
         plt.close()
+        print("✅ 已生成带地图背景的叠加图")
     
     def generate_statistics(self):
         """生成统计信息"""
@@ -371,7 +427,8 @@ if __name__ == "__main__":
         "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-50",
         "/home/ubuntu/project/MSC/Msc_Project/data/cs_51-100"
     ]
-    output_dir = "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-100"
+    output_dir = "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow"
+    map_image_path = "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/glasgow_map.png"
     
-    visualizer = SimpleChargingStationVisualizer(network_file, xml_dirs, output_dir)
+    visualizer = SimpleChargingStationVisualizer(network_file, xml_dirs, output_dir, map_image_path)
     visualizer.run_visualization()

@@ -13,8 +13,10 @@ import pandas as pd
 from collections import defaultdict
 import matplotlib.patches as patches
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import os
 import warnings
+from PIL import Image
 warnings.filterwarnings('ignore')
 
 # 设置字体和图形参数
@@ -26,15 +28,58 @@ plt.rcParams['figure.dpi'] = 300
 plt.rcParams['savefig.dpi'] = 300
 
 class ChargingStationVisualizerV2:
-    def __init__(self, network_file, xml_dirs, output_dir):
+    def __init__(self, network_file, xml_dirs, output_dir, map_image_path=None):
         self.network_file = network_file
         self.xml_dirs = xml_dirs  # ['data/cs_1-50', 'data/cs_51-100']
         self.output_dir = output_dir
+        self.map_image_path = map_image_path
         self.lane_coordinates = {}  # lane_id -> (x, y)
         self.charging_stations = {}  # group_name -> [{'id': '', 'lane': '', 'x': x, 'y': y}]
+        self.map_bounds = None  # 地图图片的坐标边界
         
         # 确保输出目录存在
         os.makedirs(output_dir, exist_ok=True)
+        
+        # 如果提供了地图图片，加载并获取坐标边界
+        if map_image_path and os.path.exists(map_image_path):
+            self.load_map_image()
+        else:
+            self.map_image_path = None
+    
+    def load_map_image(self):
+        """加载地图图片并设置坐标边界"""
+        try:
+            # 加载地图图片
+            self.map_image = Image.open(self.map_image_path)
+            print(f"✅ 成功加载地图图片: {self.map_image_path}")
+            print(f"   图片尺寸: {self.map_image.size}")
+            
+            # 设置格拉斯哥地图的大致坐标边界（基于SUMO网络）
+            # 这些值需要根据实际的网络坐标范围调整
+            self.map_bounds = {
+                'x_min': -5000,   # 可能需要调整
+                'x_max': 15000,   # 可能需要调整  
+                'y_min': -2000,   # 可能需要调整
+                'y_max': 12000    # 可能需要调整
+            }
+            
+        except Exception as e:
+            print(f"⚠️ 加载地图图片失败: {e}")
+            self.map_image_path = None
+            self.map_image = None
+    
+    def add_map_background(self, ax, x_min, x_max, y_min, y_max):
+        """为给定的坐标轴添加地图背景"""
+        if not hasattr(self, 'map_image') or self.map_image is None:
+            return
+        
+        try:
+            # 显示地图图片作为背景
+            extent = [x_min, x_max, y_min, y_max]
+            ax.imshow(self.map_image, extent=extent, aspect='auto', alpha=0.7, zorder=0)
+            print("✅ 已添加地图背景")
+        except Exception as e:
+            print(f"⚠️ 添加地图背景失败: {e}")
         
     def parse_network_file(self):
         """解析SUMO网络文件，提取lane的坐标信息"""
@@ -316,7 +361,10 @@ class ChargingStationVisualizerV2:
             if not stations:
                 continue
                 
-            plt.figure(figsize=(12, 10))
+            fig, ax = plt.subplots(figsize=(14, 12))
+            
+            # 添加地图背景
+            self.add_map_background(ax, x_min, x_max, y_min, y_max)
             
             # 分离真实坐标和估算坐标
             real_x = [s['x'] for s in stations if not s.get('estimated', False)]
@@ -324,35 +372,45 @@ class ChargingStationVisualizerV2:
             est_x = [s['x'] for s in stations if s.get('estimated', False)]
             est_y = [s['y'] for s in stations if s.get('estimated', False)]
             
-            # 绘制真实坐标的充电站（红色）
+            # 绘制真实坐标的充电站（红色，更大更醒目）
             if real_x:
-                plt.scatter(real_x, real_y, c='red', s=40, alpha=0.8, 
-                           edgecolors='darkred', linewidth=0.8, label='Exact locations')
+                ax.scatter(real_x, real_y, c='red', s=80, alpha=0.9, 
+                           edgecolors='darkred', linewidth=1.5, label='Exact locations', zorder=5)
             
-            # 绘制估算坐标的充电站（蓝色）
+            # 绘制估算坐标的充电站（蓝色，更大更醒目）
             if est_x:
-                plt.scatter(est_x, est_y, c='blue', s=40, alpha=0.6, 
-                           edgecolors='darkblue', linewidth=0.8, label='Estimated locations')
+                ax.scatter(est_x, est_y, c='blue', s=80, alpha=0.8, 
+                           edgecolors='darkblue', linewidth=1.5, label='Estimated locations', zorder=5)
             
             # 添加图例
             if real_x and est_x:
-                plt.legend()
+                ax.legend(loc='upper right', fontsize=12, framealpha=0.9)
+            elif real_x:
+                ax.legend(loc='upper right', fontsize=12, framealpha=0.9)
+            elif est_x:
+                ax.legend(loc='upper right', fontsize=12, framealpha=0.9)
             
-            plt.title(f'{group_name} Charging Station Distribution\n({len(stations)} stations: {len(real_x)} exact + {len(est_x)} estimated)', 
-                     fontsize=16, fontweight='bold')
-            plt.xlabel('X Coordinate (meters)', fontsize=12)
-            plt.ylabel('Y Coordinate (meters)', fontsize=12)
-            plt.grid(True, alpha=0.3)
+            ax.set_title(f'{group_name} Charging Station Distribution on Glasgow Map\n({len(stations)} stations: {len(real_x)} exact + {len(est_x)} estimated)', 
+                        fontsize=16, fontweight='bold', pad=20)
+            ax.set_xlabel('X Coordinate (meters)', fontsize=14, fontweight='bold')
+            ax.set_ylabel('Y Coordinate (meters)', fontsize=14, fontweight='bold')
+            
+            # 设置网格，但透明度更低以不遮挡地图
+            ax.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
             
             # 设置统一的坐标轴范围
-            plt.xlim(x_min, x_max)
-            plt.ylim(y_min, y_max)
+            ax.set_xlim(x_min, x_max)
+            ax.set_ylim(y_min, y_max)
+            
+            # 设置坐标轴刻度样式
+            ax.tick_params(axis='both', which='major', labelsize=12)
             
             # 保存单独的图像
             plt.tight_layout()
-            scatter_png = f'{self.output_dir}/{group_name}_scatter.png'
-            plt.savefig(scatter_png, dpi=300, bbox_inches='tight')
+            scatter_png = f'{self.output_dir}/{group_name}_scatter_with_map.png'
+            plt.savefig(scatter_png, dpi=300, bbox_inches='tight', facecolor='white')
             plt.close()
+            print(f"✅ 已生成带地图背景的散点图: {scatter_png}")
         
     def create_comparison_plot(self):
         """创建前6个方案的对比图"""
@@ -378,6 +436,9 @@ class ChargingStationVisualizerV2:
             ax = axes[idx]
             stations = self.charging_stations[group_name]
             
+            # 添加地图背景
+            self.add_map_background(ax, x_min, x_max, y_min, y_max)
+            
             if not stations:
                 continue
             
@@ -387,34 +448,49 @@ class ChargingStationVisualizerV2:
             est_x = [s['x'] for s in stations if s.get('estimated', False)]
             est_y = [s['y'] for s in stations if s.get('estimated', False)]
             
-            # 绘制散点图
+            # 绘制散点图（更大更醒目）
             if real_x:
-                ax.scatter(real_x, real_y, c='red', s=30, alpha=0.7, 
-                          edgecolors='darkred', linewidth=0.5)
+                ax.scatter(real_x, real_y, c='red', s=50, alpha=0.9, 
+                          edgecolors='darkred', linewidth=1, zorder=5)
             if est_x:
-                ax.scatter(est_x, est_y, c='blue', s=30, alpha=0.5, 
-                          edgecolors='darkblue', linewidth=0.5)
+                ax.scatter(est_x, est_y, c='blue', s=50, alpha=0.8, 
+                          edgecolors='darkblue', linewidth=1, zorder=5)
             
             ax.set_title(f'{group_name}\n({len(stations)} stations)', fontsize=12, fontweight='bold')
             ax.set_xlabel('X Coordinate (meters)', fontsize=10)
             ax.set_ylabel('Y Coordinate (meters)', fontsize=10)
-            ax.grid(True, alpha=0.3)
+            ax.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
             
             # 设置相同的坐标轴范围
             ax.set_xlim(x_min, x_max)
             ax.set_ylim(y_min, y_max)
         
-        plt.suptitle('Charging Station Distribution Comparison (First 6 Scenarios)', fontsize=16, fontweight='bold')
+        plt.suptitle('Charging Station Distribution Comparison on Glasgow Map (First 6 Scenarios)', fontsize=16, fontweight='bold')
         plt.tight_layout()
-        comparison_png = f'{self.output_dir}/charging_stations_comparison.png'
-        plt.savefig(comparison_png, dpi=300, bbox_inches='tight')
+        comparison_png = f'{self.output_dir}/charging_stations_comparison_with_map.png'
+        plt.savefig(comparison_png, dpi=300, bbox_inches='tight', facecolor='white')
         plt.close()
+        print(f"✅ 已生成带地图背景的对比图: {comparison_png}")
         
     def create_overlay_plot(self):
         """创建所有方案的叠加图"""
         print("正在生成叠加散点图...")
         
-        plt.figure(figsize=(15, 12))
+        fig, ax = plt.subplots(figsize=(16, 14))
+        
+        # 计算全局坐标范围
+        all_x = []
+        all_y = []
+        for stations_list in self.charging_stations.values():
+            for station in stations_list:
+                all_x.append(station['x'])
+                all_y.append(station['y'])
+        
+        x_min, x_max = min(all_x) - 500, max(all_x) + 500
+        y_min, y_max = min(all_y) - 500, max(all_y) + 500
+        
+        # 添加地图背景
+        self.add_map_background(ax, x_min, x_max, y_min, y_max)
         
         # 使用不同颜色表示不同的方案密度
         all_coords = defaultdict(int)
@@ -430,19 +506,30 @@ class ChargingStationVisualizerV2:
         frequencies = list(all_coords.values())
         
         # 创建散点图，颜色表示出现频次
-        scatter = plt.scatter(x_coords, y_coords, c=frequencies, s=50, 
-                            alpha=0.7, cmap='YlOrRd', edgecolors='black', linewidth=0.5)
+        scatter = ax.scatter(x_coords, y_coords, c=frequencies, s=80, 
+                            alpha=0.8, cmap='YlOrRd', edgecolors='black', linewidth=0.8, zorder=5)
         
-        plt.colorbar(scatter, label='Station Selection Frequency')
-        plt.title('100 Scenarios Charging Station Overlay Map\n(Color intensity shows selection frequency)', fontsize=16, fontweight='bold')
-        plt.xlabel('X Coordinate (meters)', fontsize=12)
-        plt.ylabel('Y Coordinate (meters)', fontsize=12)
-        plt.grid(True, alpha=0.3)
+        # 添加颜色条
+        cbar = plt.colorbar(scatter, ax=ax, shrink=0.8)
+        cbar.set_label('Station Selection Frequency', fontsize=14, fontweight='bold')
+        cbar.ax.tick_params(labelsize=12)
+        
+        ax.set_title('100 Scenarios Charging Station Overlay on Glasgow Map\n(Color intensity shows selection frequency)', 
+                    fontsize=16, fontweight='bold', pad=20)
+        ax.set_xlabel('X Coordinate (meters)', fontsize=14, fontweight='bold')
+        ax.set_ylabel('Y Coordinate (meters)', fontsize=14, fontweight='bold')
+        ax.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
+        ax.tick_params(axis='both', which='major', labelsize=12)
+        
+        # 设置坐标轴范围
+        ax.set_xlim(x_min, x_max)
+        ax.set_ylim(y_min, y_max)
         
         plt.tight_layout()
-        overlay_png = f'{self.output_dir}/charging_stations_overlay.png'
-        plt.savefig(overlay_png, dpi=300, bbox_inches='tight')
+        overlay_png = f'{self.output_dir}/charging_stations_overlay_with_map.png'
+        plt.savefig(overlay_png, dpi=300, bbox_inches='tight', facecolor='white')
         plt.close()
+        print(f"✅ 已生成带地图背景的叠加图: {overlay_png}")
         
     def generate_statistics(self):
         """生成统计信息"""
@@ -529,8 +616,9 @@ if __name__ == "__main__":
         "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-50",
         "/home/ubuntu/project/MSC/Msc_Project/data/cs_51-100"
     ]
-    output_dir = "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-100"
+    output_dir = "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow"
+    map_image_path = "/home/ubuntu/project/MSC/Msc_Project/data/cs_1-100_glasgow/glasgow_map.png"
     
     # 创建可视化器并运行
-    visualizer = ChargingStationVisualizerV2(network_file, xml_dirs, output_dir)
+    visualizer = ChargingStationVisualizerV2(network_file, xml_dirs, output_dir, map_image_path)
     visualizer.run_visualization()

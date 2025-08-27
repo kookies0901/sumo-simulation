@@ -14,3 +14,5 @@ scripts/interpolation_for_visualization.py
 scripts/improved_visualization.py
 scripts/generate_interpolated_dataset.py
 data/cs_1-100/
+data/cs_1-100_orig/
+data/cs_1-100_glasgow/

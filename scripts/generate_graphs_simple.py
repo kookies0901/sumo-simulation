@@ -48,6 +48,7 @@ def get_feature_performance_columns(df):
     # 布局特征变量（移除已删除的列）
     feature_columns = [
         'avg_dist_to_center',
+        'avg_pairwise_distance',
         'std_pairwise_distance',
         'min_pairwise_distance',
         'max_pairwise_distance',
