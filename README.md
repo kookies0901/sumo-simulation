@@ -1,16 +1,16 @@
-# 🔋 Intelligent EV Charging Layout Optimization via SUMO Simulation and ML
+# Intelligent EV Charging Layout Optimization via SUMO Simulation and ML
 
 This project aims to **optimize electric vehicle (EV) charging station layouts** using **realistic traffic simulations** and **machine learning (ML)** models. It is built upon **SUMO (Simulation of Urban Mobility)** and targets Glasgow’s real road network.
 
 ---
 
-## 🎯 Project Goal
+## Project Goal
 
 > Build a digital pipeline that simulates EV usage in real traffic, evaluates charging station layouts, and trains an ML model to **predict the effectiveness of future layouts** — enabling faster iteration without rerunning SUMO each time.
 
 ---
 
-## 🗺️ Overall Workflow
+## Overall Workflow
 
 ```text
 ┌────────────────────┐
@@ -46,7 +46,7 @@ build_training_dataset.py  ←── combines simulation + layout for ML trainin
 
 ---
 
-## 📁 File Structure
+## File Structure
 .
 ├── config/
 │
@@ -79,7 +79,7 @@ build_training_dataset.py  ←── combines simulation + layout for ML trainin
 
 ---
 
-## 📊 Output Dataset Format (for ML)
+## Output Dataset Format (for ML)
 
 After simulation + feature extraction, the ML-ready training dataset will include:
 
@@ -89,7 +89,7 @@ After simulation + feature extraction, the ML-ready training dataset will includ
 
 ---
 
-## 🤖 Potential Use Cases
+## Potential Use Cases
 
 * Predict best-performing charging layouts **without rerunning SUMO**
 * Use ML model to explore large layout design space
@@ -97,19 +97,8 @@ After simulation + feature extraction, the ML-ready training dataset will includ
 
 ---
 
-## 🚧 Current Progress
 
-✅ Cleaned Glasgow net.xml
-✅ Parsed scenario configs
-✅ Generated charging station layouts
-✅ Generated trips, sumocfg, and ran SUMO simulations
-✅ Extracted SOC + waiting time
-✅ Created layout feature vectors
-🔄 Next: batch training ML model + inference on new layouts
-
----
-
-## 🛠️ Requirements
+## Requirements
 
 * Python ≥ 3.10
 * SUMO (with TraCI)
@@ -118,7 +107,7 @@ After simulation + feature extraction, the ML-ready training dataset will includ
 
 ---
 
-## ✍️ Author
+## Author
 
 **Tingting Yang**, MSc Computing Science (University of Glasgow)
 Special focus: intelligent systems, mobility simulation, AI companionship research
@@ -126,7 +115,6 @@ Special focus: intelligent systems, mobility simulation, AI companionship resear
 For contributions, issues or guidance, feel free to contact or open a pull request.
 
 ---
-目标的文件系统结构（统一规范）
 
 # 📁 scripts/ 说明文档
 
@@ -160,12 +148,13 @@ pipeline
 5. `run_simulation.py` → 执行仿真并采集指标  
 6. `extract_layout_features.py` + `build_training_dataset.py` → 构建模型训练数据
 
--------------------------------------------------------------------------
+---
 # cursor analysis summary
 Ran tool
 Read file: README.md
 
 ---
+
 ### 项目简介
 
 MSC_PROJECT旨在通过**SUMO交通仿真**与**机器学习**，优化电动汽车（EV）充电站布局。项目以格拉斯哥真实路网为基础，构建数字化仿真与数据分析管道，最终目标是训练ML模型，**预测不同充电站布局的效果**，从而无需每次都运行SUMO仿真即可快速评估新布局。
@@ -234,11 +223,6 @@ MSC_PROJECT旨在通过**SUMO交通仿真**与**机器学习**，优化电动汽
 - 可选：torch, xgboost
 
 # 使用手册
-## 运行仿真
-1. **单个运行**：`python scripts/run_simulation.py -s S001 -d dataset_1`
-2. **批量仿真**：`python scripts/run_and_collect.py`
-3. **数据解析**：从输出文件中解析充电数据（下一步实现）
-
 ## 运行仿真+收集数据
 1. 处理单个场景（结果保存到 sumo/dataset_1/S001/result/charging_analysis.csv）
 python scripts/run_and_collect.py -s S001 -d dataset_1
@@ -246,63 +230,6 @@ python scripts/run_and_collect.py -s S001 -d dataset_1
 python scripts/run_and_collect.py -s S001 -d dataset_1 -o my_analysis.csv
 3. 处理所有场景
 python scripts/run_and_collect.py --all
-
-
-基本流程：
-1. 手动创建数据集dataset_
-2. generate_cs_candidates.py生成n组215个候选充电桩
-3. generate_scenarios.py:清洗地图（有则跳过），生成充电桩候选点（有则跳过），然后执行以下循环：每个场景生成充电站布局，提取布局特征，生成路由，生成sumocfg。
-        调用的脚本有：
-                clean_net.py
-                generate_cs_candidates.py
-                对数据集的每个场景循环调用：
-                generate_charging_stations.py
-                extract_layout_features.py
-                generator_trip.py
-                generate_sumocfg.py
-4. run_and_collect.py运行sumo和收集时间数据
-        调用的脚本有：
-                run_simulation.py
-5. build_training_datatset.py将该数据集的每个场景数据收集到csv类型文件中作为ML的训练输入数据，保存位置为/models/input下，格式为:
-dataset,scenario_id,vehicle_count,ev_ratio,cs_layout_features_vector(cs_count,avg_dist_to_center,avg_nearest_neighbor,std_nearest_neighbor,min_distance),avg_waiting_time,avg_charging_time,ev_count,avg_initial_soc,avg_final_soc,simulation_duration
-                
-
-我可能需要新增一个脚本流程：
-1. 先在scripts下创建一个类似于generator_trip.py的新脚本（不要直接覆盖修改generator_trip.py）,该脚本接受传入车辆总数和EV占比，
-生成固定EV和petrol数量和OD的三个rou.xml文件（分别为sequence，mixed，random），即除了出发顺序和时间不同，其他全部一致，这三个rou文件直接保存到data/下面作为全局资源。
-2. 然后我需要直接生成包含255个充电桩的n中布局，你可以修改脚本让我直接调用generate_cs_candidates.py，接受传入的参数n生成n个候选布局到data/cs/layout_registry.json中。然后调用generator_charing_site.py和extract_layout_features.py创建这n组布局比如cs_group_001.xml以及001_layout_features.csv，输出的布局文件直接放到data/cs/下面同样作为全局资源。
-3. 然后我需要在每个dataset中创建一个类似于scenario_matrix.csv的文件,比如叫sc_mtx.csv，内容为
-scenario_id,cs_layout_id,rou_type
-S001,cs_group_001,sequence
-S002,cs_group_001,mixed
-S003,cs_group_001,random
-地图直接就用已经清洗好的/home/ubuntu/project/MSC/Msc_Project/data/map/glasgow_clean.net.xml
-4. 创建类似于run_and_collect.py脚本，可以指定单个场景运行或者整个数据集运行，生成每个场景对应的输出，比如sumo/S001/output/charing_analysis.csv，内容和现在的一样
-我的意思就是尽量减少重复生成rou.xml和其他重复行为，因为我的目的就是对若干个cs_group_number.xml进行三种固定路由的仿真，然后获得仿真数据（charging_analysis.csv），后续可能要平均这三种仿真的结果，以确保该种cs布局仿真的准确性。未必需要新建很多脚本，如果你可以直接调用已经=存在的脚本话，毕竟我的目的是简化流程，你看看你能理解吗，可行性怎么样
-
-
-我完全理解你的需求！这是一个很好的优化思路，可以大大提高仿真效率。让我分析一下你的需求：
-
-我已经完全理解了你的需求并实现了完整的解决方案！这个新架构有以下优势：
-
-### 🎯 **核心优势**
-
-1. **效率提升**：
-   - 预生成OD对和路由文件，避免重复计算
-   - 复用充电站布局，减少生成时间
-   - 批量处理，提高整体效率
-
-2. **实验公平性**：
-   - 确保对比实验使用相同的OD对
-   - 相同的初始SOC分布
-   - 只有出发模式不同
-
-3. **资源管理**：
-   - 集中管理全局资源
-   - 清晰的目录结构
-   - 便于维护和扩展
-
-### 📁 **新的文件结构**
 
 ```
 data/
@@ -343,15 +270,6 @@ sumo/                         # 仿真输出
    ```bash
    python scripts/run_global_simulation.py
    ```
-
-### 📊 **实验设计**
-
-- **10个充电站布局** × **3种出发模式** = **30个场景**
-- 每个布局都有三种出发模式的对比
-- 可以平均三种模式的结果来评估布局性能
-
-这个方案完全满足你的需求，既提高了效率，又保证了实验的科学性！你觉得这个实现怎么样？
-好的！让我详细说明整个流程，从头到尾如何使用这些新脚本。
 
 ## �� 完整流程指南
 
@@ -590,34 +508,6 @@ python scripts/run_global_simulation.py --matrix data/scenario_matrix_batch1.csv
 python scripts/run_global_simulation.py --matrix data/scenario_matrix_batch2.csv
 ```
 
-## �� 结果分析
-
-仿真完成后，你可以：
-
-1. **查看单个场景结果**：
-   ```bash
-   cat sumo/S001/result/charging_analysis.csv
-   ```
-
-2. **查看所有场景汇总**：
-   ```bash
-   cat sumo/charging_analysis.csv
-   ```
-
-3. **分析布局性能**：
-   - 对同一布局的三种出发模式结果求平均
-   - 比较不同布局的性能
-   - 分析出发模式对充电站使用的影响
-
-## 🎯 关键优势
-
-1. **效率**：预生成资源，避免重复计算
-2. **公平性**：相同OD对，相同初始SOC
-3. **可扩展**：容易添加新布局或出发模式
-4. **可重现**：固定随机种子，结果可重现
-
-这样整个流程就非常清晰了！你可以根据需要选择快速开始或分步执行。
-
 生成充电桩的热力图：
 cd /home/ubuntu/project/MSC/Msc_Project && source venv/bin/activate && python visualize_charging_stations_v2.py
 
@@ -625,23 +515,20 @@ cd /home/ubuntu/project/MSC/Msc_Project && source venv/bin/activate && python vi
 生成拟合图像（linear和polynomial）：
 python scripts/gnerate_graphs_simple.py
 
-检验是否过拟合：
-1. python scripts/simple_regression_analysis_v2.py(linear和polynomial)
 
-2. 
+1. 检验是否过拟合：
+python scripts/simple_regression_analysis_v2.py(linear和polynomial)
 
-
-比较不同模型的详细表现：
+2. 比较不同模型的详细表现：
 python scripts/model_comparison_analysis.py
 解释过拟合：
 python scripts/explain_model_choice_rationale.py
 
-!!最终解释为什么选用二项式：
+解释为什么选用二项式：
 python scripts/trend_vs_prediction_analysis.py
 
 
 展示图像终点（分段展示）
-
 
 python scripts/png_to_pdf_converter.py data/cs_1-100_glasgow --batch-size 3 --max-width 1500 --max-height 1500
 
